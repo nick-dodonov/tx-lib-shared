@@ -1,12 +1,12 @@
 add_rules("mode.debug", "mode.release")
 
-target("foo")
+target("tx-lib-shared")
     set_kind("static")
     add_files("src/foo.cpp")
 
-target("tx-lib-shared")
+target("tx-lib-shared-demo")
     set_kind("binary")
-    add_deps("foo")
+    add_deps("tx-lib-shared")
     add_files("src/main.cpp")
 
 --
