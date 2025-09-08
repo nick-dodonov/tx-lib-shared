@@ -1,6 +1,6 @@
 add_rules("mode.debug", "mode.release")
 
-target("tx-lib-shared")
+target("tx-pkg-misc")
     set_kind("static")
 
     add_files("src/foo.cpp")
@@ -11,7 +11,7 @@ target("tx-lib-shared")
 
     add_includedirs("src", {public = true})
 
--- target("tx-lib-shared-demo")
+-- target("tx-pkg-misc-demo")
 --     set_kind("binary")
---     add_deps("tx-lib-shared")
+--     add_deps("tx-pkg-misc")
 --     add_files("src/main.cpp")
