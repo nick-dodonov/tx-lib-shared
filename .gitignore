@@ -1,8 +1,11 @@
-# Xmake cache
-.xmake/
-build/
+# Bazel
+/bazel-*
+MODULE.bazel.lock
+.*.bazelrc
 
 # MacOS Cache
 .DS_Store
 
-
+# CLion
+/.idea/
+/.clwb/

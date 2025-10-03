@@ -1,0 +1,8 @@
+"""Misc targets package"""
+
+module(
+    name = "tx-pkg-misc",
+    version = "0.1.0",
+)
+
+bazel_dep(name = "rules_cc", version = "0.2.8")

@@ -1,0 +1,10 @@
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+
+cc_binary(
+    name = "hello-pkg",
+    srcs = ["hello-pkg/main.cpp"],
+    copts = [
+        "-std=c++20",
+    ],
+    visibility = ["//visibility:public"],
+)
