@@ -8,5 +8,6 @@ tx_binary(
     copts = [
         "-std=c++20",
     ],
+    deps = ["@tx-pkg-aux//src:pkg-boot"],
     visibility = ["//visibility:public"],
 )
