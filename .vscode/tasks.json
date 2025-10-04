@@ -1,0 +1,17 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "hello-pkg (dbg)",
+            "type": "shell",
+            // https://web.archive.org/web/20220716134022/https://shanee.io/blog/2019/05/28/bazel-with-visual-studio-code/
+            "command": "bazel build demo:hello-pkg --spawn_strategy=local -c dbg --announce_rc",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        }
+    ]
+}
