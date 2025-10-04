@@ -9,7 +9,7 @@
             "preLaunchTask": "hello-pkg (dbg)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg",
+            "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
             "args": [
                 "${workspaceFolder}"
             ],
@@ -28,7 +28,8 @@
             // dwarfdump bazel-out/darwin_x86_64-dbg/bin/demo/_objs/hello-pkg/main.o
             "sourceFileMap": {
                 // w/ apple_support - relative paths in dwarf but "." is not mapped
-                "demo": "${workspaceFolder}/demo"
+                "demo": "${workspaceFolder}/demo",
+                "external": "${workspaceFolder}/bazel-tx-pkg-misc/external"
             },
             //TODO: try .lldbinit https://github.com/bazelbuild/bazel/issues/6327#issuecomment-982965782
             // "setupCommands": [
