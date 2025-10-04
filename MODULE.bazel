@@ -5,8 +5,26 @@ module(
     version = "0.1.0",
 )
 
+# tx deps
+bazel_dep(name = "tx-kit-repo", version = "0.1.0")
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "emsdk", version = "4.0.15")
+
 # apple_support makes `dsymutil -s bazel-bin/demo/hello-pkg` paths relative - deterministic and simplify debug setup
 # build --features=oso_prefix_is_pwd seems doesn't works (https://keith.github.io/xcode-man-pages/ld.1.html#oso_prefix)
 # can be replaced w/ build --copt=-ffile-compilation-dir=.
 bazel_dep(name = "apple_support", version = "1.23.1")
-bazel_dep(name = "rules_cc", version = "0.2.8")
+bazel_dep(name = "rules_cc", version = "0.2.9")
+
+# tx-kit-repo isn't published yet in private registry yet
+git_override(
+    module_name = "tx-kit-repo",
+    branch = "main",
+    remote = "https://github.com/nick-dodonov/tx-kit-repo.git",
+)
+
+#TODO: find the way for local emsdk toolchain via .bazelrc
+# use_extension("@emsdk//bazel:extensions.bzl", "emsdk_extension").configure(
+#   emsdk_dir = "/Users/nik/emsdk",
+#   enable_override = True,
+# )

@@ -1,6 +1,8 @@
-load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+#load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+load("@tx-kit-repo//configs/builder:tx_binary.bzl", "tx_binary")
 
-cc_binary(
+#cc_binary(
+tx_binary(
     name = "hello-pkg",
     srcs = ["hello-pkg/main.cpp"],
     copts = [

@@ -15,5 +15,6 @@ int main(int argc, char** argv)
     } else {
         perror("  dir: getcwd() error");
     }
-    return 0;
+
+    return argc - 1;
 }
