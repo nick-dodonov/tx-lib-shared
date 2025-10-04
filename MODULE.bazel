@@ -5,4 +5,8 @@ module(
     version = "0.1.0",
 )
 
+# apple_support makes `dsymutil -s bazel-bin/demo/hello-pkg` paths relative - deterministic and simplify debug setup
+# build --features=oso_prefix_is_pwd seems doesn't works (https://keith.github.io/xcode-man-pages/ld.1.html#oso_prefix)
+# can be replaced w/ build --copt=-ffile-compilation-dir=.
+bazel_dep(name = "apple_support", version = "1.23.1")
 bazel_dep(name = "rules_cc", version = "0.2.8")

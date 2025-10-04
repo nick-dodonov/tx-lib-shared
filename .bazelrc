@@ -1,0 +1,13 @@
+# TODO: rm osx debug setup from repo
+build --spawn_strategy=local
+build --compilation_mode=dbg
+# to make relative debug info w/o apple_support added
+build --copt=-ffile-compilation-dir=.
+
+#build --features=oso_prefix_is_pwd # doesn't work =(
+#build --sandbox_debug # to debug w/ --spawn_strategy=sandbox
+#build --strip=never # to debug w/ --compilation_mode=opt | fast
+
+#build --strategy=Genrule=local
+#build --strategy_regexp=^Linking=local
+#build --copt=-fdebug-prefix-map=$(pwd)=/
