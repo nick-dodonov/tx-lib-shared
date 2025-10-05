@@ -2,36 +2,30 @@
 
 module(
     name = "tx-pkg-misc",
-    version = "0.1.0",
+    version = "0.0.0",
 )
 
-# tx deps
-bazel_dep(name = "tx-kit-repo")
-bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "emsdk", version = "4.0.15")
-
-# apple_support makes `dsymutil -s bazel-bin/demo/hello-pkg` paths relative - deterministic and simplify debug setup
-# build --features=oso_prefix_is_pwd seems doesn't works (https://keith.github.io/xcode-man-pages/ld.1.html#oso_prefix)
-# can be replaced w/ build --copt=-ffile-compilation-dir=.
 bazel_dep(name = "apple_support", version = "1.23.1")
+bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "rules_cc", version = "0.2.9")
 bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
+bazel_dep(name = "emsdk", version = "4.0.15")
 
-# demo deps
-bazel_dep(name = "tx-pkg-aux")
-
-# tx-kit-repo isn't published in private registry yet #TODO: use published version when available
+# tx useful rules and tools
+bazel_dep(name = "tx-kit-repo")  # not published in private registry yet
 git_override(
     module_name = "tx-kit-repo",
-    branch = "main",
     remote = "https://github.com/nick-dodonov/tx-kit-repo.git",
+    tag = "v/0.1.1-pre.2",
 )
 
-# tx-pkg-aux isn't published in private registry yet #TODO: use published version when available
+# demo deps
+bazel_dep(name = "tx-pkg-aux")  # not published in private registry yet
 git_override(
     module_name = "tx-pkg-aux",
-    branch = "main",
+    #branch = "main",  # need bazel run @tx-kit-repo//tools:cleanup tx-pkg-aux && bazel clean
     remote = "https://github.com/nick-dodonov/tx-pkg-aux.git",
+    tag = "v/0.1.0-pre.1",
     verbose = True,
 )
 
