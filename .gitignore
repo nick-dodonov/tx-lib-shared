@@ -2,10 +2,20 @@
 /bazel-*
 MODULE.bazel.lock
 .*.bazelrc
-
-# MacOS Cache
-.DS_Store
+/external
 
 # CLion
 /.idea/
 /.clwb/
+
+# Native debugging customizations
+# TODO: add correct generation to `bazel run @tx-kit-repo//tools/dev:init` to simplify debug in any IDE even when --override_module= for debugging is used
+# - settings set target.source-map /Users/nik/p/t/tx/tx-pkg-misc/external /private/var/tmp/_bazel_nik/60152b3d410636b53eaaf6bfe2a4d378/external
+/.lldbinit
+
+# OS/caches/temp files
+.DS_Store
+Thumbs.db
+*.bak
+*.tmp
+*.log
