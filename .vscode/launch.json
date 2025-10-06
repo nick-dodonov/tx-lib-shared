@@ -1,44 +1,63 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    // Useful links/commands to investigate source mapping issues.
+    //  - https://github.com/bazelbuild/apple_support?tab=readme-ov-file
+    //  - dsymutil -s bazel-bin/demo/hello-pkg | grep N_OSO
+    //  - dwarfdump bazel-out/darwin_x86_64-dbg/bin/demo/_objs/hello-pkg/main.o
+    //  - TODO: add lldb investigation commands too
+
+    //TODO: Try Natvis for my types https://code.visualstudio.com/docs/cpp/natvis
+    //TODO: Find the way to share settings for different targets (e.g. via variables or "compounds")
+
     "version": "0.2.0",
     "configurations": [
+        // Via C/C++ extension ("cppdbg")
+        //  https://code.visualstudio.com/docs/cpp/launch-json-reference#_sourcefilemap
         {
-            "name": "hello-pkg",
-            "preLaunchTask": "hello-pkg (dbg)",
+            "name": "hello-pkg (C/C++)",
             "type": "cppdbg",
+            "preLaunchTask": "hello-pkg (dbg)",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
-            "args": [
-                "${workspaceFolder}"
-            ],
+            "args": [],
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "stopAtEntry": false,
             "externalConsole": false,
             "MIMode": "lldb",
-            //TODO:
-            // - https://stackoverflow.com/questions/56734812/debugging-with-bazel-in-visual-studio-code-with-ubuntu
-            // - https://code.visualstudio.com/docs/cpp/launch-json-reference#_sourcefilemap
-            // - https://github.com/bazelbuild/bazel/issues/23110#issuecomment-2250252937
-            // - https://github.com/bazelbuild/apple_support?tab=readme-ov-file
-            // - https://www.smileykeith.com/2025/09/21/understanding-apple-debug-info/
-            // dsymutil -s bazel-bin/demo/hello-pkg | grep N_OSO
-            // dwarfdump bazel-out/darwin_x86_64-dbg/bin/demo/_objs/hello-pkg/main.o
             "sourceFileMap": {
-                // w/ apple_support - relative paths in dwarf but "." is not mapped
-                "demo": "${workspaceFolder}/demo",
-                "external": "${workspaceFolder}/bazel-tx-pkg-misc/external"
+                // Workaround for Bazel 8 default build location of external deps
+                "external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external"
             },
-            //TODO: try .lldbinit https://github.com/bazelbuild/bazel/issues/6327#issuecomment-982965782
-            // "setupCommands": [
-            //     {
-            //         "description": "Enable pretty-printing for gdb",
-            //         "text": "-enable-pretty-printing",
-            //         "ignoreFailures": false
-            //     }
-            // ]
+            "setupCommands": [
+                {
+                    // Workaround for strange lldb behaviour in C/C++ extension:
+                    //  it seems to ignore default working directory to map source 
+                    //  and "sourceFileMap" doesn't support "." mapping.
+                    "text": "settings set target.source-map . ${workspaceFolder}",
+                    "ignoreFailures": false
+                }
+            ],
+            //"stopAtEntry": true,
+        },
+
+        // Via CodeLLDB extension ("lldb")
+        //  https://github.com/vadimcn/codelldb/blob/master/MANUAL.md
+        {
+            "name": "hello-pkg (CodeLLDB)",
+            "type": "lldb",
+            "preLaunchTask": "hello-pkg (dbg)",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
+            "cwd": "${workspaceFolder}/bazel-bin/demo",
+            "initCommands": [
+                // Workaround multi-root workspace issue of CoreLLDB: it executes lldb 
+                //  in the root of workspace instead of workspaceFolder and relative sources cannot be found.
+                // So set working directory the same as debug launhed from VSCode in workspaceFolder.
+                "platform setting -w ${workspaceFolder}",
+                // Workaround for Bazel 8 default build location of external deps ("sourceFileMap" can be used instead):
+                "settings set target.source-map external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+                //"b main", // better than stopOnEntry (because it stops in _start)
+            ],
+            //"stopOnEntry": true
         }
     ]
 }
