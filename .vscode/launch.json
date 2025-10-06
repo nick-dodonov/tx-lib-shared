@@ -7,6 +7,9 @@
 
     //TODO: Try Natvis for my types https://code.visualstudio.com/docs/cpp/natvis
     //TODO: Find the way to share settings for different targets (e.g. via variables or "compounds")
+    //TODO: use shared .lldbinit setup (instead of similar duplicates) for different:
+    //  - build options (relative, absolute in output_base, relative w/ absolute include_dir)
+    //  - lldb debuggers (C/C++ ext, CodeLLDB ext, CLion built-in)
 
     "version": "0.2.0",
     "configurations": [
@@ -15,7 +18,6 @@
         {
             "name": "hello-pkg (C/C++)",
             "type": "cppdbg",
-            "preLaunchTask": "hello-pkg (dbg)",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
             "args": [],
@@ -25,7 +27,9 @@
             "MIMode": "lldb",
             "sourceFileMap": {
                 // Workaround for Bazel 8 default build location of external deps
-                "external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external"
+                "external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+                // Workaround for debugging externals in build from CLion (makes relative sym paths but w/ absolute root)
+                "${workspaceFolder}/external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
             },
             "setupCommands": [
                 {
@@ -36,7 +40,8 @@
                     "ignoreFailures": false
                 }
             ],
-            //"stopAtEntry": true,
+            "preLaunchTask": "hello-pkg (dbg)",
+            // "stopAtEntry": true,
         },
 
         // Via CodeLLDB extension ("lldb")
@@ -44,7 +49,6 @@
         {
             "name": "hello-pkg (CodeLLDB)",
             "type": "lldb",
-            "preLaunchTask": "hello-pkg (dbg)",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
             "cwd": "${workspaceFolder}/bazel-bin/demo",
@@ -57,11 +61,14 @@
                 //  in the root of workspace instead of workspaceFolder and relative sources cannot be found.
                 // So set working directory the same as debug launhed from VSCode in workspaceFolder.
                 "platform setting -w ${workspaceFolder}",
-                // Workaround for Bazel 8 default build location of external deps ("sourceFileMap" can be used instead):
+                // Workaround for Bazel 8 default build location of external deps ("sourceFileMap" can be used instead)
                 "settings set target.source-map external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
-                // "b main", // better than stopOnEntry (because it stops in _start)
+                // Workaround for debugging externals in build from CLion (makes relative sym paths but w/ absolute root)
+                "settings set target.source-map ${workspaceFolder}/external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+                // "b main", // better than stopOnEntry (stops in _start)
             ],
-            //"stopOnEntry": true
+            "preLaunchTask": "hello-pkg (dbg)",
+            // "stopOnEntry": true
         }
     ]
 }
