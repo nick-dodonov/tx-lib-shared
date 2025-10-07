@@ -12,10 +12,10 @@ bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
 bazel_dep(name = "emsdk", version = "4.0.15")
 
 # tx useful rules and tools
-bazel_dep(name = "tx-kit-repo")  # not published in private registry yet
+bazel_dep(name = "tx-kit-ext")  # not published in private registry yet
 git_override(
-    module_name = "tx-kit-repo",
-    remote = "https://github.com/nick-dodonov/tx-kit-repo.git",
+    module_name = "tx-kit-ext",
+    remote = "https://github.com/nick-dodonov/tx-kit-ext.git",
     tag = "v/0.1.1-pre.2",
 )
 
@@ -23,7 +23,7 @@ git_override(
 bazel_dep(name = "tx-pkg-aux")  # not published in private registry yet
 git_override(
     module_name = "tx-pkg-aux",
-    #branch = "main",  # need bazel run @tx-kit-repo//tools:cleanup tx-pkg-aux && bazel clean
+    #branch = "main",  # need bazel run @tx-kit-ext//tools:cleanup tx-pkg-aux && bazel clean
     remote = "https://github.com/nick-dodonov/tx-pkg-aux.git",
     tag = "v/0.1.0-pre.1",
     verbose = True,
