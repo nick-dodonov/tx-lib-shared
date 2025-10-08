@@ -36,7 +36,7 @@
                     // Workaround for strange lldb behaviour in C/C++ extension:
                     //  it seems to ignore default working directory to map source 
                     //  and "sourceFileMap" doesn't support "." mapping.
-                    "text": "settings set target.source-map . ${workspaceFolder}",
+                    "text": "settings append target.source-map . ${workspaceFolder}",
                     "ignoreFailures": false
                 }
             ],
@@ -51,23 +51,27 @@
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
-            "cwd": "${workspaceFolder}/bazel-bin/demo",
+            "cwd": "${workspaceFolder}",
             "initCommands": [
-                //TODO: optional dev setup: 
-                // "command source ~/.lldbinit",
-                // "command source ${workspaceFolder}/.lldbinit",
-
-                // Workaround multi-root workspace issue of CoreLLDB: it executes lldb 
-                //  in the root of workspace instead of workspaceFolder and relative sources cannot be found.
-                // So set working directory the same as debug launhed from VSCode in workspaceFolder.
+                // Workaround for multi-root workspace issue of CoreLLDB: 
+                //  it executes lldb  in the root of workspace instead of workspaceFolder, so relative sources cannot be found.
+                //  So set working directory the same as debug launched from VSCode in workspaceFolder.
                 "platform setting -w ${workspaceFolder}",
-                // Workaround for Bazel 8 default build location of external deps ("sourceFileMap" can be used instead)
-                "settings set target.source-map external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
-                // Workaround for debugging externals in build from CLion (makes relative sym paths but w/ absolute root)
-                "settings set target.source-map ${workspaceFolder}/external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+
+                // CoreLLDB doesn't source ~/.lldbinit automatically https://github.com/vadimcn/codelldb/issues/367
+                "command source ${env:HOME}/.lldbinit",
+                "command source ${workspaceFolder}/.lldbinit",
+
+                // DISABLED: .lldbinit already handles this much better (with more options like real paths for --override_module repos)
+                // // Workaround for Bazel 8 default build location of external deps ("sourceFileMap" can be used instead)
+                // "settings append target.source-map external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+                // // Workaround for debugging externals in build from CLion (makes relative sym paths but w/ absolute root)
+                // "settings append target.source-map ${workspaceFolder}/external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+
                 // "b main", // better than stopOnEntry (stops in _start)
             ],
-            "preLaunchTask": "hello-pkg (dbg)",
+
+            // "preLaunchTask": "hello-pkg (dbg)",
             // "stopOnEntry": true
         }
     ]
