@@ -79,8 +79,7 @@
 
                 // "b main", // better than stopOnEntry (stops in _start)
             ],
-
-            // "preLaunchTask": "hello-pkg (dbg)",
+            "preLaunchTask": "hello-pkg (dbg)",
             // "stopOnEntry": true
         }
     ]
