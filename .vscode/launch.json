@@ -25,19 +25,28 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb",
-            "sourceFileMap": {
-                // Workaround for Bazel 8 default build location of external deps
-                "external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
-                // Workaround for debugging externals in build from CLion (makes relative sym paths but w/ absolute root)
-                "${workspaceFolder}/external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
-            },
+            // "sourceFileMap": {
+            //     // Workaround for Bazel 8 default build location of external deps
+            //     "external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+            //     // Workaround for debugging externals in build from CLion (makes relative sym paths but w/ absolute root)
+            //     "${workspaceFolder}/external": "${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
+            // },
             "setupCommands": [
+                // {
+                //     // Workaround for strange lldb behaviour in C/C++ extension:
+                //     //  it seems to ignore default working directory to map source 
+                //     //  and "sourceFileMap" doesn't support "." mapping.
+                //     "text": "settings append target.source-map . ${workspaceFolder}",
+                //     "ignoreFailures": false
+                // }
+                // CoreLLDB doesn't source ~/.lldbinit automatically https://github.com/vadimcn/codelldb/issues/367
                 {
-                    // Workaround for strange lldb behaviour in C/C++ extension:
-                    //  it seems to ignore default working directory to map source 
-                    //  and "sourceFileMap" doesn't support "." mapping.
-                    "text": "settings append target.source-map . ${workspaceFolder}",
-                    "ignoreFailures": false
+                    "text": "command source ${env:HOME}/.lldbinit",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "command source ${workspaceFolder}/.lldbinit",
+                    "ignoreFailures": true
                 }
             ],
             "preLaunchTask": "hello-pkg (dbg)",
@@ -47,7 +56,7 @@
         // Via CodeLLDB extension ("lldb")
         //  https://github.com/vadimcn/codelldb/blob/master/MANUAL.md
         {
-            "name": "hello-pkg (CodeLLDB)",
+            "name": "hello-pkg (LLDB)",
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
