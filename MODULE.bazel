@@ -29,8 +29,5 @@ git_override(
     verbose = True,
 )
 
-#TODO: find the way for local emsdk toolchain via .bazelrc
-# use_extension("@emsdk//bazel:extensions.bzl", "emsdk_extension").configure(
-#   emsdk_dir = "/Users/nik/emsdk",
-#   enable_override = True,
-# )
+# test dependency
+bazel_dep(name = "googletest", version = "1.17.0", dev_dependency = True)
