@@ -1,12 +1,14 @@
+#load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@tx-kit-ext//rules/build:tx_test.bzl", "tx_test")
 
+#cc_test(
 tx_test(
     name = "misc",
-    srcs = ["misc_test.cpp"],
-    deps = [
-        "@tx-pkg-aux//src:pkg-log",
-        "@googletest//:gtest_main",
-    ],
-    copts = ["-std=c++20"],
     size = "small",
+    srcs = ["misc_test.cpp"],
+    copts = ["-std=c++20"],
+    deps = [
+        "@googletest//:gtest_main",
+        "@tx-pkg-aux//src:pkg-log",
+    ],
 )
