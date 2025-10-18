@@ -19,7 +19,7 @@
             "name": "hello-pkg (C/C++)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
+            "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg",
             "args": [],
             "cwd": "${workspaceFolder}",
             "environment": [],
@@ -59,7 +59,7 @@
             "name": "hello-pkg (LLDB)",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg-bin",
+            "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg",
             "cwd": "${workspaceFolder}",
             "initCommands": [
                 // Workaround for multi-root workspace issue of CoreLLDB: 

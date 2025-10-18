@@ -1,7 +1,5 @@
-#load("@rules_cc//cc:cc_test.bzl", "cc_test")
 load("@tx-kit-ext//rules/build:tx_test.bzl", "tx_test")
 
-#cc_test(
 tx_test(
     name = "misc",
     size = "small",
