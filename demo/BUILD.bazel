@@ -3,9 +3,6 @@ load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
 tx_binary(
     name = "hello-pkg",
     srcs = ["hello-pkg/main.cpp"],
-    copts = [
-        "-std=c++20",
-    ],
     deps = ["@tx-pkg-aux//src:pkg-boot"],
     visibility = ["//visibility:public"],
 )
