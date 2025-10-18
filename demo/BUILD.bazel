@@ -2,7 +2,12 @@ load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
 
 tx_binary(
     name = "hello-pkg",
-    srcs = ["hello-pkg/main.cpp"],
+    srcs = glob(["hello-pkg/**"]),
     deps = ["@tx-pkg-aux//src:pkg-boot"],
-    visibility = ["//visibility:public"],
+)
+
+tx_binary(
+    name = "hello-coro",
+    srcs = glob(["hello-coro/**"]),
+    deps = ["@tx-pkg-aux//src:pkg-boot"],
 )
