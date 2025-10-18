@@ -16,7 +16,7 @@
         // Via C/C++ extension ("cppdbg")
         //  https://code.visualstudio.com/docs/cpp/launch-json-reference#_sourcefilemap
         {
-            "name": "hello-pkg (C/C++)",
+            "name": "demo:hello-pkg (C/C++)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg",
@@ -49,14 +49,14 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "hello-pkg (dbg)",
+            "preLaunchTask": "demo:hello-pkg",
             // "stopAtEntry": true,
         },
 
         // Via CodeLLDB extension ("lldb")
         //  https://github.com/vadimcn/codelldb/blob/master/MANUAL.md
         {
-            "name": "hello-pkg (LLDB)",
+            "name": "demo:hello-pkg (LLDB)",
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg",
@@ -79,8 +79,37 @@
 
                 // "b main", // better than stopOnEntry (stops in _start)
             ],
-            "preLaunchTask": "hello-pkg (dbg)",
+            "preLaunchTask": "demo:hello-pkg",
             // "stopOnEntry": true
-        }
+        },
+        {
+            "name": "demo:hello-coro (LLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/demo/hello-coro",
+            "cwd": "${workspaceFolder}",
+            "initCommands": [
+                "platform setting -w ${workspaceFolder}",
+                "command source ${env:HOME}/.lldbinit",
+                "command source ${workspaceFolder}/.lldbinit",
+            ],
+            "preLaunchTask": "demo:hello-coro",
+        },
+        {
+            "name": "test:misc (LLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/test/misc",
+            "cwd": "${workspaceFolder}",
+            "initCommands": [
+                "platform setting -w ${workspaceFolder}",
+                "command source ${env:HOME}/.lldbinit",
+                "command source ${workspaceFolder}/.lldbinit",
+            ],
+            "args": [
+                "--gtest_filter=CoroTest.*",
+            ],
+            "preLaunchTask": "test:misc",
+        },
     ]
 }

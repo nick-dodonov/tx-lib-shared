@@ -2,7 +2,7 @@ load("@tx-kit-ext//rules/build:tx_test.bzl", "tx_test")
 
 tx_test(
     name = "misc",
-    srcs = ["misc_test.cpp"],
+    srcs = glob(["*.cpp"]),
     deps = [
         "@googletest//:gtest_main",
         "@tx-pkg-aux//src:pkg-log",

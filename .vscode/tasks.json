@@ -4,14 +4,50 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "hello-pkg (dbg)",
+            "label": "compile_commands :refresh_all",
             "type": "shell",
-            // https://web.archive.org/web/20220716134022/https://shanee.io/blog/2019/05/28/bazel-with-visual-studio-code/
-            "command": "bazel build demo:hello-pkg --spawn_strategy=local -c dbg --announce_rc",
+            "command": "bazel run @hedron_compile_commands//:refresh_all", // -- --workspace_root=${workspaceFolder} --output_file=${workspaceFolder}/compile_commands.json",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-        }
+        },
+        {
+            "label": "dev:init (force links)",
+            "type": "shell",
+            "command": "bazel run @tx-kit-ext//tools/dev:init --override_module=tx-kit-ext=../tx-kit-ext -- -sf",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        // https://web.archive.org/web/20220716134022/https://shanee.io/blog/2019/05/28/bazel-with-visual-studio-code/
+        {
+            "label": "demo:hello-pkg",
+            "type": "shell",
+            "command": "bazel build demo:hello-pkg",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "label": "demo:hello-coro",
+            "type": "shell",
+            "command": "bazel build demo:hello-coro",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "label": "test:misc",
+            "type": "shell",
+            "command": "bazel build test:misc -c dbg",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
     ]
 }
