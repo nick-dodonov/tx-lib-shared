@@ -20,3 +20,12 @@ TEST(MiscTest, Foo4) {
     Log::Debug("Test message 4");
     EXPECT_TRUE(true);
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////
+struct CoroTest : testing::Test {};
+TEST_F(CoroTest, Sub)
+{
+	Log::Debug("Sub1");
+	EXPECT_TRUE(true);
+}

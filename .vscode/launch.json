@@ -107,7 +107,8 @@
                 "command source ${workspaceFolder}/.lldbinit",
             ],
             "args": [
-                "--gtest_filter=CoroTest.*",
+                //"--gtest_filter=FooFixture.*",
+                //"--gtest_filter=CoroTest.*",
             ],
             "preLaunchTask": "test:misc",
         },
