@@ -24,43 +24,47 @@ struct CoroTest : testing::Test {
 
     QueueSynCtx synCtx;
     bool coroutineCompleted = {};
-};
 
-struct CoroTestPromise {
-    CoroTest& testInstance;
+    struct Promise {
+        CoroTest& testInstance;
 
-    /// Constructor automatically receives reference to CoroTest object
-    CoroTestPromise(CoroTest& test) noexcept : testInstance(test) {}
-    /// The coroutine's return object is void for test functions
-    void get_return_object() noexcept {}
+        /// Constructor automatically receives reference to CoroTest object
+        Promise(CoroTest& test) noexcept : testInstance(test) {}
+        /// The coroutine's return object is void for test functions
+        void get_return_object() noexcept {}
 
-    struct InitialSuspend {
-        bool await_ready() noexcept { return false; }
-        void await_suspend(std::coroutine_handle<CoroTestPromise> handle) noexcept { handle.promise().testInstance.synCtx.post(handle); }
-        void await_resume() noexcept {}
+        struct InitialSuspend {
+            bool await_ready() noexcept { return false; }
+            void await_suspend(std::coroutine_handle<Promise> handle) noexcept { 
+                handle.promise().testInstance.synCtx.post(handle);
+            }
+            void await_resume() noexcept {}
+        };
+
+        InitialSuspend initial_suspend() noexcept { return {}; }
+
+        struct FinalAwaiter {
+            bool await_ready() noexcept { return false; }
+            void await_suspend(std::coroutine_handle<Promise> handle) noexcept { 
+                handle.promise().testInstance.coroutineCompleted = true;
+            }
+            void await_resume() noexcept {}
+        };
+
+        FinalAwaiter final_suspend() noexcept { return {}; }
+
+        void return_void() noexcept {}
+        void unhandled_exception() noexcept {
+            Log::Fatal("CoreTest: unhandled exception");
+            std::terminate();
+        }
     };
-
-    InitialSuspend initial_suspend() noexcept { return {}; }
-
-    struct FinalAwaiter {
-        bool await_ready() noexcept { return false; }
-        void await_suspend(std::coroutine_handle<CoroTestPromise> handle) noexcept { handle.promise().testInstance.coroutineCompleted = true; }
-        void await_resume() noexcept {}
-    };
-
-    FinalAwaiter final_suspend() noexcept { return {}; }
-
-    void return_void() noexcept {}
-    void unhandled_exception() noexcept {
-        Log::Fatal("CoreTest: unhandled exception");
-        std::terminate();
-    }
 };
 
 namespace std {
     template <typename T>
     requires std::is_base_of_v<CoroTest, T>
     struct coroutine_traits<void, T&> {
-        using promise_type = CoroTestPromise;
+        using promise_type = CoroTest::Promise;
     };
 }
