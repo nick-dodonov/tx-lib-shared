@@ -4,6 +4,11 @@
 #include <queue>
 #include <thread>
 
+template<typename T>
+concept SynCtx = requires(T ctx, std::coroutine_handle<> handle) {
+    ctx.post(handle);
+};
+
 struct QueueSynCtx {
     using Task = std::coroutine_handle<>;
 
@@ -19,7 +24,7 @@ struct QueueSynCtx {
         return true;
     }
 
-    void run() {
+    void run_all() {
         while (run_once()) {
             ; // continue running tasks
         }
@@ -31,9 +36,12 @@ private:
     std::queue<Task> tasks;
 };
 
+static_assert(SynCtx<QueueSynCtx>, "QueueSynCtx must satisfy SynCtx concept");
+
+template<SynCtx SynCtx>
 struct DelayAwaiter {
     std::chrono::milliseconds delay;
-    QueueSynCtx* synCtx;
+    SynCtx* synCtx;
 
     [[nodiscard]] bool await_ready() const noexcept { return false; }
     void await_suspend(std::coroutine_handle<> handle) const {
@@ -46,6 +54,7 @@ struct DelayAwaiter {
     void await_resume() const noexcept {}
 };
 
-inline DelayAwaiter delay_for(std::chrono::milliseconds duration, QueueSynCtx& synCtx) {
+template<SynCtx SynCtx>
+inline DelayAwaiter<SynCtx> delay_for(std::chrono::milliseconds duration, SynCtx& synCtx) {
     return {duration, &synCtx};
 }
