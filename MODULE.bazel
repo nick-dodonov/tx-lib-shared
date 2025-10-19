@@ -25,7 +25,7 @@ git_override(
     module_name = "tx-pkg-aux",
     #branch = "main",  # need bazel run @tx-kit-ext//tools:cleanup tx-pkg-aux && bazel clean
     remote = "https://github.com/nick-dodonov/tx-pkg-aux.git",
-    tag = "v/0.1.0-pre.2",
+    tag = "v/0.1.0",
     verbose = True,
 )
 
