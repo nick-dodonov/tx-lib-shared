@@ -15,6 +15,7 @@ Checks: >
   readability-*,
   -readability-magic-numbers,
   -readability-convert-member-functions-to-static,
+  -readability-identifier-length
 
 # Disabled checks explanation:
 # - alpha.*: Experimental checks, too many false positives
@@ -24,6 +25,7 @@ Checks: >
 # - modernize-use-trailing-return-type: Verbose for simple functions
 # - readability-magic-numbers: Acceptable in test code
 # - readability-convert-member-functions-to-static: Breaks coroutine awaiter protocol
+# - readability-identifier-length: Conflicts with naming conventions (variable i/j/n are common)
 
 CheckOptions:
   - key: readability-identifier-naming.VariableCase
