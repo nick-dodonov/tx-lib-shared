@@ -5,6 +5,7 @@ Checks: >
   -clang-analyzer-alpha.*,
   bugprone-*,
   cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-const-or-ref-data-members,
   -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
@@ -14,6 +15,15 @@ Checks: >
   readability-*,
   -readability-magic-numbers,
   -readability-convert-member-functions-to-static,
+
+# Disabled checks explanation:
+# - alpha.*: Experimental checks, too many false positives
+# - cppcoreguidelines-avoid-const-or-ref-data-members: Needed for coroutine promises
+# - cppcoreguidelines-avoid-magic-numbers: Acceptable in test code
+# - cppcoreguidelines-pro-bounds-*: Sometimes needed for C interop
+# - modernize-use-trailing-return-type: Verbose for simple functions
+# - readability-magic-numbers: Acceptable in test code
+# - readability-convert-member-functions-to-static: Breaks coroutine awaiter protocol
 
 CheckOptions:
   - key: readability-identifier-naming.VariableCase
