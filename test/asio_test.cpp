@@ -8,7 +8,7 @@ static void print(const std::error_code& ec) {
 }
 
 TEST(AsioTest, Try) {
-    Log::Debug("Try: start");
+    Log::Debug(std::format("Try: start: ASIO_HAS_PTHREADS={}", ASIO_HAS_PTHREADS));
 
     asio::io_context io;
     asio::steady_timer t(io, asio::chrono::milliseconds(200));
