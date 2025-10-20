@@ -5,9 +5,9 @@ module(
     version = "0.0.0",
 )
 
-bazel_dep(name = "apple_support", version = "1.23.1")
+bazel_dep(name = "apple_support", version = "1.24.1")
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.9")
+bazel_dep(name = "rules_cc", version = "0.2.10")
 bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
 bazel_dep(name = "emsdk", version = "4.0.15")
 
