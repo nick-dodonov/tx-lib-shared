@@ -469,13 +469,13 @@ int main(int argc, char** argv)
     // Демонстрируем генераторы
     demonstrate_generators();
 
-#ifndef __EMSCRIPTEN__
+//#ifndef __EMSCRIPTEN__
     // Демонстрируем асинхронные задачи
     demonstrate_async_tasks();
     
     // Демонстрируем параллельное выполнение
     demonstrate_parallel_tasks();
-#endif
+//#endif
 
     Log::Info("\n=== ВСЕ ДЕМОНСТРАЦИИ ЗАВЕРШЕНЫ УСПЕШНО ===");
     
