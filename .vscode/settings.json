@@ -1,0 +1,14 @@
+{
+    "testMate.cpp.debug.configTemplate": {
+        "type": "lldb",
+        "program": "${workspaceFolder}/bazel-bin/test/misc",
+        "cwd": "${workspaceFolder}",
+        "initCommands": [
+            "platform setting -w ${workspaceFolder}",
+            "command source ${env:HOME}/.lldbinit",
+            "command source ${workspaceFolder}/.lldbinit",
+        ],
+    },
+    //"testMate.cpp.test.executables": "{build,Build,BUILD,out,Out,OUT}/**/*{test,Test,TEST}*"
+    "testMate.cpp.test.executables": "bazel-bin/test/misc"
+}

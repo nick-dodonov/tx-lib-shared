@@ -41,6 +41,15 @@
             },
         },
         {
+            "label": "demo:asio-try",
+            "type": "shell",
+            "command": "bazel build demo:asio-try",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
             "label": "test:misc",
             "type": "shell",
             "command": "bazel build test:misc -c dbg",
