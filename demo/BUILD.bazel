@@ -11,3 +11,12 @@ tx_binary(
     srcs = glob(["hello-coro/**"]),
     deps = ["@tx-pkg-aux//src:pkg-boot"],
 )
+
+tx_binary(
+    name = "asio-try",
+    srcs = glob(["asio-try/**"]),
+    deps = [
+        "@tx-pkg-aux//src:pkg-boot",
+        "@asio//:asio",
+    ],
+)
