@@ -107,7 +107,8 @@
                 "command source ${workspaceFolder}/.lldbinit",
             ],
             "args": [
-                "localhost",
+                "-s",
+                //"localhost",
             ],            
             "preLaunchTask": "demo:asio-try",
         },
