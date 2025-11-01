@@ -1,14 +1,10 @@
 {
-    "testMate.cpp.debug.configTemplate": {
-        "type": "lldb",
-        "program": "${workspaceFolder}/bazel-bin/test/misc",
-        "cwd": "${workspaceFolder}",
-        "initCommands": [
-            "platform setting -w ${workspaceFolder}",
-            "command source ${env:HOME}/.lldbinit",
-            "command source ${workspaceFolder}/.lldbinit",
-        ],
-    },
-    //"testMate.cpp.test.executables": "{build,Build,BUILD,out,Out,OUT}/**/*{test,Test,TEST}*"
-    "testMate.cpp.test.executables": "bazel-bin/test/misc"
+    //TODO: multiple tests setup like "{build,Build,BUILD,out,Out,OUT}/**/*{test,Test,TEST}*"
+    "testMate.cpp.test.executables": "bazel-bin/test/misc",
+    //https://github.com/matepek/vscode-catch2-test-adapter/blob/master/documents/configuration/debug.configTemplate.md
+    "testMate.cpp.debug.configTemplate": "name:test:misc (LLDB)",
+    "lldb.displayFormat": "auto",
+    "lldb.showDisassembly": "auto",
+    "lldb.dereferencePointers": true,
+    "lldb.consoleMode": "commands"
 }

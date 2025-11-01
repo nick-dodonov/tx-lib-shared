@@ -106,6 +106,9 @@
                 "command source ${env:HOME}/.lldbinit",
                 "command source ${workspaceFolder}/.lldbinit",
             ],
+            "args": [
+                "localhost",
+            ],            
             "preLaunchTask": "demo:asio-try",
         },
         {
@@ -120,8 +123,8 @@
                 "command source ${workspaceFolder}/.lldbinit",
             ],
             "args": [
+                // Don't need to specify because C++TestMate w/ proper configTemplate in settings.json do it well itself
                 //"--gtest_filter=FooFixture.*",
-                "--gtest_filter=CoroTest.*",
             ],
             "preLaunchTask": "test:misc",
         },
