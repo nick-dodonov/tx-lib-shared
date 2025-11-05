@@ -4,8 +4,8 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "compile_commands :refresh_all",
             "type": "shell",
+            "label": "compile_commands :refresh_all",
             "command": "bazel run @hedron_compile_commands//:refresh_all", // -- --workspace_root=${workspaceFolder} --output_file=${workspaceFolder}/compile_commands.json",
             "group": {
                 "kind": "build",
@@ -13,8 +13,8 @@
             },
         },
         {
-            "label": "dev:init (force links)",
             "type": "shell",
+            "label": "dev:init (force links)",
             "command": "bazel run @tx-kit-ext//tools/dev:init --override_module=tx-kit-ext=../tx-kit-ext -- -sf",
             "group": {
                 "kind": "build",
@@ -23,8 +23,8 @@
         },
         // https://web.archive.org/web/20220716134022/https://shanee.io/blog/2019/05/28/bazel-with-visual-studio-code/
         {
-            "label": "demo:hello-pkg",
             "type": "shell",
+            "label": "demo:hello-pkg",
             "command": "bazel build demo:hello-pkg",
             "group": {
                 "kind": "build",
@@ -32,8 +32,8 @@
             },
         },
         {
-            "label": "demo:hello-coro",
             "type": "shell",
+            "label": "demo:hello-coro",
             "command": "bazel build demo:hello-coro",
             "group": {
                 "kind": "build",
@@ -41,18 +41,24 @@
             },
         },
         {
-            "label": "demo:asio-try",
             "type": "shell",
+            "label": "demo:asio-try",
             "command": "bazel build demo:asio-try",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {
+                    "INHERIT": "1"
+                }
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
         },
         {
-            "label": "test:misc",
             "type": "shell",
-            "command": "bazel build test:misc -c dbg",
+            "label": "test:misc",
+            "command": "bazel build test:misc",
             "group": {
                 "kind": "build",
                 "isDefault": true

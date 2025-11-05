@@ -6,32 +6,99 @@
 
 using asio::ip::tcp;
 
-static std::string make_daytime_string() {
+static std::string make_daytime_string()
+{
     std::time_t now = time(0);
     return std::ctime(&now);
 }
 
-int main_server()
-{
-    asio::io_context io_context;
+class tcp_connection : public std::enable_shared_from_this<tcp_connection> {
+public:
+    typedef std::shared_ptr<tcp_connection> pointer;
+    static pointer create(asio::io_context& io_context) { return pointer(new tcp_connection(io_context)); }
 
-    Log::Info("initializing");
-    tcp::acceptor acceptor(io_context, tcp::endpoint(tcp::v4(), 13));
+    tcp::socket& socket() { return socket_; }
 
-    for (;;) {
-        Log::Info("listening");
-
-        tcp::socket socket(io_context);
-        acceptor.accept(socket);
-
-        Log::Info("accepted");
-        std::string message = make_daytime_string();
-
-        Log::Info(std::format("writing: {}", message));
-        std::error_code ignored_error;
-        asio::write(socket, asio::buffer(message), ignored_error);
+    void start()
+    {
+        message_ = make_daytime_string();
+        Log::Info(std::format("writing: {}", message_));
+        asio::async_write(
+            socket_,
+            asio::buffer(message_),
+            std::bind(
+                &tcp_connection::handle_write,
+                shared_from_this(),
+                asio::placeholders::error,
+                asio::placeholders::bytes_transferred
+            )
+        );
     }
-    return 0;
+
+private:
+    tcp_connection(asio::io_context& io_context)
+        : socket_(io_context)
+    {
+    }
+
+    void handle_write(const std::error_code& error, size_t bytes_transferred)
+    {
+        auto err_msg = std::string(std::system_error(error).what());
+        Log::DebugF("written: {} bytes ({})", bytes_transferred, err_msg);
+    }
+
+    tcp::socket socket_;
+    std::string message_;
+};
+
+class tcp_server {
+public:
+    tcp_server(asio::io_context& io_context)
+        : io_context_(io_context)
+        , acceptor_(io_context, tcp::endpoint(tcp::v4(), 13))
+    {
+        start_accept();
+    }
+
+private:
+    void start_accept()
+    {
+        Log::Info("listening");
+        tcp_connection::pointer new_connection = tcp_connection::create(io_context_);
+
+        acceptor_.async_accept(
+            new_connection->socket(),
+            std::bind(&tcp_server::handle_accept, this, new_connection, asio::placeholders::error)
+        );
+    }
+
+    void handle_accept(tcp_connection::pointer new_connection, const std::error_code& error)
+    {
+        Log::Info("accepted");
+        if (!error) {
+            new_connection->start();
+        }
+
+        start_accept();
+    }
+
+    asio::io_context& io_context_;
+    tcp::acceptor acceptor_;
+};
+
+int main_server() {
+//   try
+//   {
+    Log::Info("initializing");
+    asio::io_context io_context;
+    tcp_server server(io_context);
+    io_context.run();
+//   }
+//   catch (std::exception& e)
+//   {
+//     std::cerr << e.what() << std::endl;
+//   }
+  return 0;
 }
 
 int main(int argc, char** argv)
