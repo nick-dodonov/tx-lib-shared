@@ -20,6 +20,10 @@
                 "kind": "build",
                 "isDefault": true
             },
+            // https://code.visualstudio.com/docs/debugtest/tasks#_run-behavior
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
         },
         // https://web.archive.org/web/20220716134022/https://shanee.io/blog/2019/05/28/bazel-with-visual-studio-code/
         {
@@ -43,17 +47,31 @@
         {
             "type": "shell",
             "label": "demo:asio-try",
-            "command": "bazel build demo:asio-try",
-            "options": {
-                "cwd": "${workspaceFolder}",
-                "env": {
-                    "INHERIT": "1"
-                }
-            },
+            "command": "bazel build demo:asio-try", // ${relativeFileDirname}
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
+            "presentation": {
+                "focus": true,
+                //"clear": true,
+            },
+            // https://code.visualstudio.com/docs/debugtest/tasks#_processing-task-output-with-problem-matchers
+            "problemMatcher": "$gcc",
+            // https://code.visualstudio.com/docs/debugtest/tasks#_defining-a-problem-matcher
+            // "problemMatcher": {
+            //     "owner": "cpp",
+            //     "fileLocation": ["autoDetect", "${workspaceFolder}"],
+            //     "source": "bazel-build",
+            //     "pattern": {
+            //         "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+            //         "file": 1,
+            //         "line": 2,
+            //         "column": 3,
+            //         "severity": 4,
+            //         "message": 5
+            //     }
+            // }
         },
         {
             "type": "shell",
@@ -62,7 +80,44 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
+            }
         },
+
+        // test w/ input variable
+        {
+            "label": "Xxxx Test Input Variable",
+            "type": "shell",
+            "command": "echo ${input:buildTarget}",
+            "problemMatcher": []
+        }
+    ],
+    // https://code.visualstudio.com/docs/reference/variables-reference#_input-variables
+    // TODO: try Command Variable extension:
+    // - https://stackoverflow.com/questions/71764897/vscode-how-to-generate-custom-task-input-options-from-a-command
+    // - https://marketplace.visualstudio.com/items?itemName=rioj7.command-variable#pickstringremember
+    "inputs": [
+        {
+            "id": "buildTarget",
+            "type": "pickString",
+            "options": [
+                "demo:hello-pkg",
+                "demo:hello-coro",
+                "demo:asio-try",
+                "test:misc"
+            ],
+            "description": "Select target to build",
+        },
+        {
+            "id": "buildTarget(auto)",
+            // "type": "promptString",
+            // "type": "pickString",
+            // https://github.com/bazel-contrib/vscode-bazel#bazel-tasks
+            "type": "command",
+            "command": "bazel.pickTarget",
+            "args": {
+                //"query": "kind(//test/...)",
+                "placeHolder": "Select target to build",
+            },
+        }
     ]
 }
