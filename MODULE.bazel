@@ -11,6 +11,15 @@ bazel_dep(name = "rules_cc", version = "0.2.10")
 bazel_dep(name = "rules_foreign_cc", version = "0.15.1")
 bazel_dep(name = "emsdk", version = "4.0.15")
 
+# Hedron's Compile Commands Extractor for Bazel
+# - https://github.com/hedronvision/bazel-compile-commands-extractor
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "abb61a688167623088f8768cc9264798df6a9d10",  #TODO: setup Renovate to update https://github.com/renovatebot/renovate
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+)
+
 # tx useful rules and tools
 bazel_dep(name = "tx-kit-ext")  # not published in private registry yet
 git_override(
@@ -19,7 +28,7 @@ git_override(
     tag = "v/0.2.0-pre.3",
 )
 
-# demo deps
+# demo/test deps
 bazel_dep(name = "tx-pkg-aux")  # not published in private registry yet
 git_override(
     module_name = "tx-pkg-aux",
@@ -29,20 +38,22 @@ git_override(
     verbose = True,
 )
 
-# test dependency
-bazel_dep(name = "googletest", version = "1.17.0", dev_dependency = True)
 bazel_dep(name = "asio", version = "1.34.2", dev_dependency = True)
 single_version_override(
     module_name = "asio",
-    patches = ["//patches:asio-add_pthreads_define.patch"],
     patch_strip = 1,
+    patches = ["//patches:asio-add_pthreads_define.patch"],
 )
 
-# Hedron's Compile Commands Extractor for Bazel
-# - https://github.com/hedronvision/bazel-compile-commands-extractor
-bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
-git_override(
-    module_name = "hedron_compile_commands",
-    commit = "abb61a688167623088f8768cc9264798df6a9d10",  #TODO: setup Renovate to update https://github.com/renovatebot/renovate
-    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+# Legacy repository dep way
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+http_archive(
+    name = "sdl3",
+    build_file = "@//modules/sdl3:BUILD.bazel",
+    sha256 = "dad488474a51a0b01d547cd2834893d6299328d2e30f479a3564088b5476bae2",
+    strip_prefix = "SDL3-3.2.26",
+    urls = ["https://github.com/libsdl-org/SDL/releases/download/release-3.2.26/SDL3-3.2.26.tar.gz"],
 )
+
+# test deps
+bazel_dep(name = "googletest", version = "1.17.0", dev_dependency = True)

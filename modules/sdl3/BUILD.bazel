@@ -1,0 +1,22 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+    visibility = ["//visibility:public"],
+)
+
+cmake(
+    name = "sdl3_static",
+    lib_source = ":all_srcs",
+    cache_entries = {"BUILD_SHARED_LIBS": "OFF"},
+    out_static_libs = ["libSDL3.a"],
+    visibility = ["//visibility:public"],
+)
+cmake(
+    name = "sdl3_shared",
+    lib_source = ":all_srcs",
+    cache_entries = {"BUILD_SHARED_LIBS": "ON"},
+    out_shared_libs = ["libSDL3.so"],
+    visibility = ["//visibility:public"],
+)
