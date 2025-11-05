@@ -6,5 +6,6 @@ tx_test(
     deps = [
         "@googletest//:gtest_main",
         "@tx-pkg-aux//src:pkg-log",
+        "@asio//:asio",
     ],
 )

@@ -1,0 +1,11 @@
+--- a/BUILD.bazel
++++ b/BUILD.bazel
+@@ -11,7 +11,7 @@
+         "asio/include/**/*.ipp",
+     ]),
+     includes = ["asio/include"],
+-    local_defines = ["ASIO_SEPARATE_COMPILATION"],
++    local_defines = ["ASIO_SEPARATE_COMPILATION", "ASIO_HAS_PTHREADS=1"],
+     visibility = ["//visibility:public"],
+     deps = ["@boringssl//:ssl"],
+ )
