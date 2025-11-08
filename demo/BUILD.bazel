@@ -13,10 +13,22 @@ tx_binary(
 )
 
 tx_binary(
-    name = "asio-try",
-    srcs = glob(["asio-try/**"]),
+    name = "try-asio",
+    srcs = glob(["try-asio/**"]),
     deps = [
         "@tx-pkg-aux//src:pkg-boot",
         "@asio//:asio",
     ],
+)
+
+tx_binary(
+    name = "try-sdl",
+    srcs = glob(["try-sdl/**"]),
+    deps = [
+        "@tx-pkg-aux//src:pkg-boot",
+        #"@sdl3//:sdl3_shared",
+    ] + select({
+        "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
+        "//conditions:default": ["@sdl3//:sdl3_shared"],
+    }),
 )

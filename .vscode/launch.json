@@ -90,10 +90,10 @@
             "preLaunchTask": "demo:hello-coro",
         },
         {
-            "name": "demo:asio-try (LLDB)",
+            "name": "demo:try-asio (LLDB)",
             "type": "lldb",
             "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/asio-try",
+            "program": "${workspaceFolder}/bazel-bin/demo/try-asio",
             "cwd": "${workspaceFolder}",
             "initCommands": [
                 "platform setting -w ${workspaceFolder}",
@@ -104,7 +104,7 @@
                 "-s",
                 //"localhost",
             ],
-            "preLaunchTask": "demo:asio-try",
+            "preLaunchTask": "demo:try-asio",
         },
         {
             "name": "test:misc (LLDB)",

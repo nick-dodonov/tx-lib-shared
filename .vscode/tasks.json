@@ -46,8 +46,8 @@
         },
         {
             "type": "shell",
-            "label": "demo:asio-try",
-            "command": "bazel build demo:asio-try", // ${relativeFileDirname}
+            "label": "demo:try-asio",
+            "command": "bazel build demo:try-asio", // ${relativeFileDirname}
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -102,7 +102,8 @@
             "options": [
                 "demo:hello-pkg",
                 "demo:hello-coro",
-                "demo:asio-try",
+                "demo:try-asio",
+                "demo:try-sdl",
                 "test:misc"
             ],
             "description": "Select target to build",
