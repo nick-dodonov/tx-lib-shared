@@ -26,7 +26,6 @@ tx_binary(
     srcs = glob(["try-sdl/**"]),
     deps = [
         "@tx-pkg-aux//src:pkg-boot",
-        #"@sdl3//:sdl3_shared",
     ] + select({
         "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
         "//conditions:default": ["@sdl3//:sdl3_shared"],
