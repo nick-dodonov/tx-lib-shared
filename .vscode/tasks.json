@@ -5,12 +5,13 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "compile_commands :refresh_all",
-            "command": "bazel run @hedron_compile_commands//:refresh_all", // -- --workspace_root=${workspaceFolder} --output_file=${workspaceFolder}/compile_commands.json",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "label": "compile_commands :refresh_all (OS)",
+            "command": "bazel run @hedron_compile_commands//:refresh_all",
+        },
+        {
+            "type": "shell",
+            "label": "compile_commands :refresh_all (WASM)",
+            "command": "bazel run @hedron_compile_commands//:refresh_all -- --config=wasm",
         },
         {
             "type": "shell",
@@ -18,7 +19,6 @@
             "command": "bazel run @tx-kit-ext//tools/dev:init --override_module=tx-kit-ext=../tx-kit-ext -- -sf",
             "group": {
                 "kind": "build",
-                "isDefault": true
             },
             // https://code.visualstudio.com/docs/debugtest/tasks#_run-behavior
             "runOptions": {
@@ -82,10 +82,9 @@
                 "isDefault": true
             }
         },
-
-        // test w/ input variable
+        // try w/ input variable
         {
-            "label": "Xxxx Test Input Variable",
+            "label": "TRY TASK w/ Input Variable",
             "type": "shell",
             "command": "echo ${input:buildTarget}",
             "problemMatcher": []

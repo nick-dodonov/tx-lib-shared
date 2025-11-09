@@ -25,6 +25,7 @@ cmake(
         "@bazel_tools//src/conditions:linux": ["libSDL3.so.0"],
         "@bazel_tools//src/conditions:windows": ["SDL3.dll"],
         #TODO: "@platforms//cpu:wasm32": ["libSDL3.so"], # -sSIDE_MODULE https://emscripten.org/docs/compiling/Dynamic-Linking.html
+        "//conditions:default": []
     }),
     visibility = ["//visibility:public"],
 )
@@ -49,10 +50,8 @@ cmake(
     }),
     out_include_dir = "include",
     out_static_libs = select({
-        "@bazel_tools//src/conditions:linux": ["libSDL3.a"],
-        "@platforms//cpu:wasm32": ["libSDL3.a"],
-        "@platforms//os:wasi": ["libSDL3.a"],
-        "@bazel_tools//src/conditions:windows": ["SDL3.lib"]
+        "@bazel_tools//src/conditions:windows": ["SDL3.lib"],
+        "//conditions:default": ["libSDL3.a"],
     }),
     visibility = ["//visibility:public"],
 )
