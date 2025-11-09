@@ -26,32 +26,11 @@ tx_binary(
     srcs = glob(["try-sdl-1st/**"]),
     deps = [
         "@tx-pkg-aux//src:pkg-boot",
-        "//conditions:default": ["@sdl3//:sdl3_static"],
-    ]
-    + select({
-        #TODO: add support for sdl3_shared build on platforms except wasm32
-        # "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
-        # "//conditions:default": ["@sdl3//:sdl3_shared"],
-    }),
-    linkopts = select({
-        "@bazel_tools//src/conditions:darwin": [
-            # dependencies for sdl3_static on macOS (sdl3_shared doesn't need these)
-            "-framework CoreGraphics",
-            "-framework CoreAudio",
-            "-framework CoreHaptics",
-            "-framework CoreMedia",
-            "-framework CoreVideo",
-            "-framework AVFoundation",
-            "-framework AudioToolbox",
-            "-framework ForceFeedback",
-            "-framework GameController",
-            "-framework IOKit",
-            "-framework Carbon",
-            "-framework Metal",
-            "-framework AppKit",
-            "-framework QuartzCore",
-            "-framework UniformTypeIdentifiers",
-        ],
-        "//conditions:default": [],
-    }),    
+        "@sdl3//:sdl3_static",
+    ],
+    #TODO: add support for sdl3_shared build on platforms except wasm32
+    # + select({
+    #     "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
+    #     "//conditions:default": ["@sdl3//:sdl3_shared"],
+    # }),
 )
