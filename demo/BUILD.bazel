@@ -22,8 +22,8 @@ tx_binary(
 )
 
 tx_binary(
-    name = "try-sdl-1st",
-    srcs = glob(["try-sdl-1st/**"]),
+    name = "try-sdl3-1st",
+    srcs = glob(["try-sdl3-1st/**"]),
     deps = [
         "@tx-pkg-aux//src:pkg-boot",
         "@sdl3//:sdl3_static",

@@ -10,7 +10,7 @@
 #include <emscripten/html5.h>
 #endif
 
-// Глобальные переменные для emscripten loop
+// Global variables for emscripten loop
 struct Context {
     SDL_Renderer *renderer;
     SDL_Window *window;
@@ -22,7 +22,7 @@ void mainLoop(void* arg)
     Context* ctx = static_cast<Context*>(arg);
     SDL_Event event;
 
-    // Обработка событий
+    // Event handling
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_EVENT_QUIT) {
             ctx->running = false;
@@ -41,11 +41,11 @@ void mainLoop(void* arg)
         }
     }
 
-    // Рендеринг
+    // Rendering
     SDL_SetRenderDrawColor(ctx->renderer, 30, 30, 130, 255);
     SDL_RenderClear(ctx->renderer);
 
-    // Здесь ваш код рисования
+    // Put your drawing code here
     SDL_SetRenderDrawColor(ctx->renderer, 255, 100, 100, 255);
     SDL_FRect rect = {50, 50, 100, 100};
     SDL_RenderFillRect(ctx->renderer, &rect);
@@ -56,7 +56,7 @@ void mainLoop(void* arg)
 int main(int argc, char** argv)
 {
     Boot::LogInfo(argc, argv);
-    Log::Info("SDL3 try demo 2");
+    Log::Info("SDL3 try demo 1st");
     int version = SDL_GetVersion();
     int major = SDL_VERSIONNUM_MAJOR(version);
     int minor = SDL_VERSIONNUM_MINOR(version);
@@ -64,13 +64,13 @@ int main(int argc, char** argv)
     
     Log::InfoF("SDL version: {}.{}.{}", major, minor, patch);
 
-    // 1. Инициализация SDL3
+    // 1. SDL3 initialization
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
         SDL_Log("SDL_Init failed: %s", SDL_GetError());
         return 1;
     }
 
-    // 2. Создание окна
+    // 2. Window creation
     SDL_Window *window = SDL_CreateWindow(
         "SDL3 Window",
         //800, 600,
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // 3. Создание рендерера
+    // 3. Renderer creation
     SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
     if (!renderer) {
         SDL_Log("Renderer creation failed: %s", SDL_GetError());
@@ -93,23 +93,23 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // Создаем контекст для главного цикла
+    // Create context for main loop
     Context context;
     context.renderer = renderer;
     context.window = window;
     context.running = true;
 
 #ifdef __EMSCRIPTEN__
-    // Для emscripten используем emscripten_set_main_loop_arg
+    // For emscripten use emscripten_set_main_loop_arg
     emscripten_set_main_loop_arg(mainLoop, &context, 0, true);
 #else
-    // Для нативной версии используем обычный цикл
+    // For native version use a regular loop
     while (context.running) {
         Uint32 frameStart = SDL_GetTicks();
         
         mainLoop(&context);
 
-        // Ограничение FPS (только для нативной версии)
+        // FPS limit (only for native version)
         Uint32 frameTime = SDL_GetTicks() - frameStart;
         if (frameTime < 16) {
             SDL_Delay(16 - frameTime);
@@ -117,8 +117,8 @@ int main(int argc, char** argv)
     }
 #endif
 
-    // 5. Очистка
-    Log::Info("Cleanup SDL");
+    // 5. Cleanup
+    Log::Info("SDL Cleanup");
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
