@@ -102,7 +102,7 @@
                 "demo:hello-pkg",
                 "demo:hello-coro",
                 "demo:try-asio",
-                "demo:try-sdl",
+                "demo:try-sdl-1st",
                 "test:misc"
             ],
             "description": "Select target to build",
