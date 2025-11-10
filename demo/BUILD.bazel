@@ -37,18 +37,26 @@ tx_binary(
 )
 
 copy_file(
-    name = "copy_sample_bmp",
-    src = "try-sdl3-2nd/sample.bmp",
+    name = "copy_data",
+    src = "try-sdl3-2nd/data/sample.bmp",
     out = "sample.bmp",
 )
 tx_binary(
     name = "try-sdl3-2nd",
     srcs = glob(["try-sdl3-2nd/*.cpp"]),
-    data = [":copy_sample_bmp"],
+    data = [
+        ":copy_data",
+    ],
     deps = [
         "@tx-pkg-aux//src:pkg-boot",
         "@sdl3//:sdl3_static",
     ],
+    linkopts = select({
+        "//conditions:default": [],
+        "@platforms//cpu:wasm32": [
+            "--preload-file", "$(location :copy_data)@/sample.bmp",
+        ],
+    }),
 )
 
 #DISABLED because current SDL3pp version has issues with constexpr, exceptions and another compile errors w/ clang and C++20
