@@ -1,4 +1,5 @@
 load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 
 tx_binary(
     name = "hello-pkg",
@@ -33,6 +34,21 @@ tx_binary(
     #     "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
     #     "//conditions:default": ["@sdl3//:sdl3_shared"],
     # }),
+)
+
+copy_file(
+    name = "copy_sample_bmp",
+    src = "try-sdl3-2nd/sample.bmp",
+    out = "sample.bmp",
+)
+tx_binary(
+    name = "try-sdl3-2nd",
+    srcs = glob(["try-sdl3-2nd/*.cpp"]),
+    data = [":copy_sample_bmp"],
+    deps = [
+        "@tx-pkg-aux//src:pkg-boot",
+        "@sdl3//:sdl3_static",
+    ],
 )
 
 #DISABLED because current SDL3pp version has issues with constexpr, exceptions and another compile errors w/ clang and C++20

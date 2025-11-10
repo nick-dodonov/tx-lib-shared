@@ -93,6 +93,19 @@
             },
             "problemMatcher": "$gcc",
         },
+        {
+            "type": "shell",
+            "label": "demo:try-sdl3-2nd",
+            "command": "bazel build demo:try-sdl3-2nd",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true,
+            },
+            "problemMatcher": "$gcc",
+        },
         // ================ Test Targets ================
         {
             "type": "shell",

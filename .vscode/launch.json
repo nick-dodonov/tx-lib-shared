@@ -120,6 +120,19 @@
             ],
             "preLaunchTask": "demo:try-sdl3-1st",
         },
+        {
+            "name": "demo:try-sdl3-2nd (LLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/demo/try-sdl3-2nd",
+            "cwd": "${workspaceFolder}",
+            "initCommands": [
+                "platform setting -w ${workspaceFolder}",
+                "command source ${env:HOME}/.lldbinit",
+                "command source ${workspaceFolder}/.lldbinit",
+            ],
+            "preLaunchTask": "demo:try-sdl3-2nd",
+        },
         // ================ Test Targets ================
         {
             "name": "test:misc (LLDB)",
