@@ -1,5 +1,5 @@
 load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
-load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
+load("@bazel_skylib//rules:copy_directory.bzl", "copy_directory")
 
 tx_binary(
     name = "hello-pkg",
@@ -36,10 +36,10 @@ tx_binary(
     # }),
 )
 
-copy_file(
+copy_directory(
     name = "copy_data",
-    src = "try-sdl3-2nd/data/sample.bmp",
-    out = "sample.bmp",
+    src = "try-sdl3-2nd/data",
+    out = "data",
 )
 tx_binary(
     name = "try-sdl3-2nd",
@@ -54,7 +54,7 @@ tx_binary(
     linkopts = select({
         "//conditions:default": [],
         "@platforms//cpu:wasm32": [
-            "--preload-file", "$(location :copy_data)@/sample.bmp",
+            "--preload-file", "$(location :copy_data)@/data",
         ],
     }),
 )
