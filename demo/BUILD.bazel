@@ -76,3 +76,12 @@ tx_binary(
 #         "-fexceptions",
 #     ],
 # )
+
+tx_binary(
+    name = "try-nghttp2",
+    srcs = glob(["try-nghttp2/**"]),
+    deps = [
+        "@tx-pkg-aux//src:pkg-boot",
+        "@nghttp2//:nghttp2",
+    ],
+)
