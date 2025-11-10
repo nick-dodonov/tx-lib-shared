@@ -1,6 +1,23 @@
 #include "Boot/Boot.h"
 #include "Log/Log.h"
 
+//TODO: simple wrapper as SDL3pp fails yet w/ clang and C++20
+/**
+template <typename T, void (*Deleter)(T*)>
+struct SDL_Deleter {
+    void operator()(T* ptr) const noexcept {
+        if (ptr) Deleter(ptr);
+    }
+};
+template <typename T, void (*Deleter)(T*)>
+using SDL_Ptr = std::unique_ptr<T, SDL_Deleter<T, Deleter>>;
+
+using Window = SDL_Ptr<SDL_Window, SDL_DestroyWindow>;
+using Renderer = SDL_Ptr<SDL_Renderer, SDL_DestroyRenderer>;
+
+Window window{SDL_CreateWindow("Title", 800, 600, 0)};
+**/
+
 /*
  * This example creates an SDL window and renderer, and then draws some
  * textures to it every frame.
