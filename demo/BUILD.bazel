@@ -1,4 +1,5 @@
 load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
+load("@bazel_skylib//rules:copy_directory.bzl", "copy_directory")
 
 tx_binary(
     name = "hello-pkg",
@@ -13,10 +14,65 @@ tx_binary(
 )
 
 tx_binary(
-    name = "asio-try",
-    srcs = glob(["asio-try/**"]),
+    name = "try-asio",
+    srcs = glob(["try-asio/**"]),
     deps = [
         "@tx-pkg-aux//src:pkg-boot",
         "@asio//:asio",
     ],
 )
+
+tx_binary(
+    name = "try-sdl3-1st",
+    srcs = glob(["try-sdl3-1st/**"]),
+    deps = [
+        "@tx-pkg-aux//src:pkg-boot",
+        "@sdl3//:sdl3_static",
+    ],
+    #TODO: add support for sdl3_shared build on platforms except wasm32
+    # + select({
+    #     "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
+    #     "//conditions:default": ["@sdl3//:sdl3_shared"],
+    # }),
+)
+
+copy_directory(
+    name = "copy_data",
+    src = "try-sdl3-2nd/data",
+    out = "data",
+)
+tx_binary(
+    name = "try-sdl3-2nd",
+    srcs = glob(["try-sdl3-2nd/*.cpp"]),
+    data = [
+        ":copy_data",
+    ],
+    deps = [
+        "@tx-pkg-aux//src:pkg-boot",
+        "@sdl3//:sdl3_static",
+    ],
+    linkopts = select({
+        "//conditions:default": [],
+        "@platforms//cpu:wasm32": [
+            "--preload-file", "$(location :copy_data)@/data",
+        ],
+    }),
+)
+
+#DISABLED because current SDL3pp version has issues with constexpr, exceptions and another compile errors w/ clang and C++20
+# tx_binary(
+#     name = "try-sdl3pp-1st",
+#     srcs = glob(["try-sdl3pp-1st/**"]),
+#     deps = [
+#         "@tx-pkg-aux//src:pkg-boot",
+#         "@sdl3pp//:sdl3pp_headers",
+#         "@sdl3//:sdl3_static",
+#     ],
+#     cxxopts = [
+#         "-Wno-invalid-constexpr",
+#         "-Wno-mismatched-tags",
+#         "-Wno-unused-variable",
+#         "-Wno-missing-braces",
+#         "-fexceptions",
+#     ],
+# )

@@ -1,15 +1,23 @@
 {
+    // ================ Demo Targets ================
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
             "type": "shell",
-            "label": "compile_commands :refresh_all",
-            "command": "bazel run @hedron_compile_commands//:refresh_all", // -- --workspace_root=${workspaceFolder} --output_file=${workspaceFolder}/compile_commands.json",
+            "label": "compile_commands :refresh_all (OS)",
+            "command": "bazel run @hedron_compile_commands//:refresh_all",
             "group": {
                 "kind": "build",
-                "isDefault": true
+            },
+        },
+        {
+            "type": "shell",
+            "label": "compile_commands :refresh_all (WASM)",
+            "command": "bazel run @hedron_compile_commands//:refresh_all -- --config=wasm",
+            "group": {
+                "kind": "build",
             },
         },
         {
@@ -18,7 +26,6 @@
             "command": "bazel run @tx-kit-ext//tools/dev:init --override_module=tx-kit-ext=../tx-kit-ext -- -sf",
             "group": {
                 "kind": "build",
-                "isDefault": true
             },
             // https://code.visualstudio.com/docs/debugtest/tasks#_run-behavior
             "runOptions": {
@@ -46,8 +53,8 @@
         },
         {
             "type": "shell",
-            "label": "demo:asio-try",
-            "command": "bazel build demo:asio-try", // ${relativeFileDirname}
+            "label": "demo:try-asio",
+            "command": "bazel build demo:try-asio", // ${relativeFileDirname}
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -75,6 +82,33 @@
         },
         {
             "type": "shell",
+            "label": "demo:try-sdl3-1st",
+            "command": "bazel build demo:try-sdl3-1st",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true,
+            },
+            "problemMatcher": "$gcc",
+        },
+        {
+            "type": "shell",
+            "label": "demo:try-sdl3-2nd",
+            "command": "bazel build demo:try-sdl3-2nd",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true,
+            },
+            "problemMatcher": "$gcc",
+        },
+        // ================ Test Targets ================
+        {
+            "type": "shell",
             "label": "test:misc",
             "command": "bazel build test:misc",
             "group": {
@@ -82,12 +116,11 @@
                 "isDefault": true
             }
         },
-
-        // test w/ input variable
+        // try w/ input variable
         {
-            "label": "Xxxx Test Input Variable",
+            "label": "TRY TASK w/ Input Variable",
             "type": "shell",
-            "command": "echo ${input:buildTarget}",
+            "command": "echo ${input:buildTarget}", // ${relativeFileDirname}
             "problemMatcher": []
         }
     ],
@@ -102,7 +135,9 @@
             "options": [
                 "demo:hello-pkg",
                 "demo:hello-coro",
-                "demo:asio-try",
+                "demo:try-asio",
+                "demo:try-sdl3-1st",
+                "demo:try-sdl3pp-1st",
                 "test:misc"
             ],
             "description": "Select target to build",

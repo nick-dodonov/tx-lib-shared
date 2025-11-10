@@ -1,0 +1,88 @@
+# https://bazel-contrib.github.io/rules_foreign_cc/cmake.html
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+filegroup(
+    name = "all_srcs",
+    srcs = glob(["**"]),
+    visibility = ["//visibility:public"],
+)
+
+cmake(
+    name = "sdl3_shared",
+    lib_source = ":all_srcs",
+    defines = select({
+        "@bazel_tools//src/conditions:darwin": [
+            "CMAKE_OSX_DEPLOYMENT_TARGET=10.13",
+        ],
+        "//conditions:default": []
+    }),
+    out_include_dir = "include",
+    out_interface_libs = select({
+        "@bazel_tools//src/conditions:windows": ["SDL3.lib"],
+        "//conditions:default": []
+    }),
+    out_shared_libs = select({
+        "@bazel_tools//src/conditions:darwin": ["libSDL3.0.dylib"],
+        "@bazel_tools//src/conditions:linux": ["libSDL3.so.0"],
+        "@bazel_tools//src/conditions:windows": ["SDL3.dll"],
+        #TODO: WASM -sSIDE_MODULE https://emscripten.org/docs/compiling/Dynamic-Linking.html
+        # "@platforms//cpu:wasm32": ["libSDL3.so"]
+        "//conditions:default": []
+    }),
+    visibility = ["//visibility:public"],
+)
+
+cmake(
+    name = "sdl3_static_base",
+    lib_source = ":all_srcs",
+    generate_args = [
+        "-DSDL_STATIC=true",
+        "-DSDL_SHARED=false",
+        "-DSDL_PTHREADS=true",
+    ] + select({
+        "@platforms//cpu:wasm32": ["-DEMSCRIPTEN=true"],
+        "@platforms//os:wasi": ["-DEMSCRIPTEN=true"],
+        "//conditions:default": []
+    }),
+    defines = select({
+        "@bazel_tools//src/conditions:darwin": [
+            "CMAKE_OSX_DEPLOYMENT_TARGET=10.13",
+        ],
+        "//conditions:default": []
+    }),
+    out_include_dir = "include",
+    out_static_libs = select({
+        "@bazel_tools//src/conditions:windows": ["SDL3.lib"],
+        "//conditions:default": ["libSDL3.a"],
+    }),
+    visibility = ["//visibility:private"],
+)
+
+# Workaround for linkopts in cmake rule w/ space isn't passed to dependents correctly
+cc_library(
+    name = "sdl3_static",
+    deps = [":sdl3_static_base"],
+    # Optional link options to be passed up to the dependencies of this library
+    linkopts = select({
+        "@bazel_tools//src/conditions:darwin": [
+            "-framework", "CoreGraphics",
+            "-framework", "CoreAudio",
+            "-framework", "CoreHaptics",
+            "-framework", "CoreMedia",
+            "-framework", "CoreVideo",
+            "-framework", "AVFoundation",
+            "-framework", "AudioToolbox",
+            "-framework", "ForceFeedback",
+            "-framework", "GameController",
+            "-framework", "IOKit",
+            "-framework", "Carbon",
+            "-framework", "Metal",
+            "-framework", "AppKit",
+            "-framework", "QuartzCore",
+            "-framework", "UniformTypeIdentifiers",
+        ],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)
