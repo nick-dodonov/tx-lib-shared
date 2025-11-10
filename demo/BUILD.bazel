@@ -101,7 +101,10 @@ tx_binary(
     linkopts = [
         "-sFETCH=1",
         "-sASYNCIFY",
-        "--post-js", "$(location :try_wasm_fetch_post_js)",
+        "-sEXPORTED_RUNTIME_METHODS=lengthBytesUTF8,stringToUTF8,UTF8ToString",
+        # "--post-js", "$(location :try_wasm_fetch_post_js)",
+        # "-sEXIT_RUNTIME=1",
+        # "-sENVIRONMENT=web,node",
     ],
     data = [
         ":try_wasm_fetch_post_js",
