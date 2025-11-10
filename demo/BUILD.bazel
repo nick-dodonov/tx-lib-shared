@@ -86,4 +86,8 @@ tx_binary(
         "@openssl//:crypto",
         "@openssl//:ssl",
     ],
+    target_compatible_with = select({
+        "@platforms//cpu:wasm32": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
 )
