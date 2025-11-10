@@ -65,22 +65,23 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
     SDL_asprintf(&bmp_path, "%ssample.bmp", SDL_GetBasePath()); /* allocate a string of the full file path */
     surface = SDL_LoadBMP(bmp_path);
     if (!surface) {
-        SDL_Log("Couldn't load bitmap: %s", SDL_GetError());
-        return SDL_APP_FAILURE;
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load bitmap: %s", SDL_GetError());
+        //XXXX return SDL_APP_FAILURE;
     }
+    else {
+        SDL_free(bmp_path); /* done with this, the file is loaded. */
 
-    SDL_free(bmp_path); /* done with this, the file is loaded. */
+        texture_width = surface->w;
+        texture_height = surface->h;
 
-    texture_width = surface->w;
-    texture_height = surface->h;
+        texture = SDL_CreateTextureFromSurface(renderer, surface);
+        if (!texture) {
+            SDL_Log("Couldn't create static texture: %s", SDL_GetError());
+            return SDL_APP_FAILURE;
+        }
 
-    texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if (!texture) {
-        SDL_Log("Couldn't create static texture: %s", SDL_GetError());
-        return SDL_APP_FAILURE;
+        SDL_DestroySurface(surface); /* done with this, the texture has a copy of the pixels now. */
     }
-
-    SDL_DestroySurface(surface); /* done with this, the texture has a copy of the pixels now. */
 
     return SDL_APP_CONTINUE; /* carry on with the program! */
 }
@@ -88,7 +89,9 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char* argv[])
 /* This function runs once at shutdown. */
 void SDL_AppQuit(void* appstate, SDL_AppResult result)
 {
-    SDL_DestroyTexture(texture);
+    if (texture) {
+        SDL_DestroyTexture(texture);
+    }
     /* SDL will clean up the window/renderer for us. */
 }
 
@@ -112,35 +115,36 @@ SDL_AppResult SDL_AppIterate(void* appstate)
     const float scale = ((float)(((int)(now % 1000)) - 500) / 500.0f) * direction;
 
     /* as you can see from this, rendering draws over whatever was drawn before it. */
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE); /* black, full alpha */
+    SDL_SetRenderDrawColor(renderer, 10, 40, 20, SDL_ALPHA_OPAQUE); /* black, full alpha */
     SDL_RenderClear(renderer);                                   /* start with a blank canvas. */
 
     /* Just draw the static texture a few times. You can think of it like a
        stamp, there isn't a limit to the number of times you can draw with it. */
+    if (texture) {
+        /* top left */
+        auto scale1 = 2.5f;
+        dst_rect.x = (100.0f * scale);
+        dst_rect.y = 0.0f;
+        dst_rect.w = (float)texture_width * scale1;
+        dst_rect.h = (float)texture_height * scale1;
+        SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
 
-    /* top left */
-    auto scale1 = 2.5f;
-    dst_rect.x = (100.0f * scale);
-    dst_rect.y = 0.0f;
-    dst_rect.w = (float)texture_width * scale1;
-    dst_rect.h = (float)texture_height * scale1;
-    SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
+        /* center this one. */
+        auto scale2 = 2.f;
+        dst_rect.x = ((float)(WINDOW_WIDTH - texture_width * scale2)) / 2.0f;
+        dst_rect.y = ((float)(WINDOW_HEIGHT - texture_height * scale2)) / 2.0f;
+        dst_rect.w = (float)texture_width * scale2;
+        dst_rect.h = (float)texture_height * scale2;
+        SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
 
-    /* center this one. */
-    auto scale2 = 2.f;
-    dst_rect.x = ((float)(WINDOW_WIDTH - texture_width * scale2)) / 2.0f;
-    dst_rect.y = ((float)(WINDOW_HEIGHT - texture_height * scale2)) / 2.0f;
-    dst_rect.w = (float)texture_width * scale2;
-    dst_rect.h = (float)texture_height * scale2;
-    SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
-
-    /* bottom right. */
-    auto scale3 = 1.8f;
-    dst_rect.x = ((float)(WINDOW_WIDTH - texture_width * scale3)) - (100.0f * scale);
-    dst_rect.y = (float)(WINDOW_HEIGHT - texture_height * scale3);
-    dst_rect.w = (float)texture_width * scale3;
-    dst_rect.h = (float)texture_height * scale3;
-    SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
+        /* bottom right. */
+        auto scale3 = 1.8f;
+        dst_rect.x = ((float)(WINDOW_WIDTH - texture_width * scale3)) - (100.0f * scale);
+        dst_rect.y = (float)(WINDOW_HEIGHT - texture_height * scale3);
+        dst_rect.w = (float)texture_width * scale3;
+        dst_rect.h = (float)texture_height * scale3;
+        SDL_RenderTexture(renderer, texture, NULL, &dst_rect);
+    }
 
     SDL_RenderPresent(renderer); /* put it all on the screen! */
 
