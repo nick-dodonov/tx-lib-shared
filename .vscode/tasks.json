@@ -7,11 +7,17 @@
             "type": "shell",
             "label": "compile_commands :refresh_all (OS)",
             "command": "bazel run @hedron_compile_commands//:refresh_all",
+            "group": {
+                "kind": "build",
+            },
         },
         {
             "type": "shell",
             "label": "compile_commands :refresh_all (WASM)",
             "command": "bazel run @hedron_compile_commands//:refresh_all -- --config=wasm",
+            "group": {
+                "kind": "build",
+            },
         },
         {
             "type": "shell",
@@ -103,6 +109,7 @@
                 "demo:hello-coro",
                 "demo:try-asio",
                 "demo:try-sdl3-1st",
+                "demo:try-sdl3pp-1st",
                 "test:misc"
             ],
             "description": "Select target to build",

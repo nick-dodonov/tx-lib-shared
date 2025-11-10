@@ -57,5 +57,13 @@ http_archive(
     urls = ["https://github.com/libsdl-org/SDL/releases/download/release-3.2.26/SDL3-3.2.26.tar.gz"],
 )
 
+http_archive(
+    name = "sdl3pp",
+    build_file = "@//modules/sdl3pp:BUILD.bazel",
+    sha256 = "320a0aaea43945991398c25a33b88ce90ee84b0dd00c48b63b1ad16c5f593abc",
+    strip_prefix = "SDL3pp-0.3.1",
+    urls = ["https://github.com/talesm/SDL3pp/archive/refs/tags/v0.3.1.tar.gz"],
+)
+
 # test deps
 bazel_dep(name = "googletest", version = "1.17.0", dev_dependency = True)

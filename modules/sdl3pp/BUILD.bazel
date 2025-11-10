@@ -1,0 +1,10 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "sdl3pp_headers",
+    hdrs = glob([
+        "amalgamation/SDL3pp/*.h",
+    ], allow_empty = True),
+    strip_include_prefix = "amalgamation",
+    visibility = ["//visibility:public"],
+)
