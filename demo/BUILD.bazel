@@ -99,7 +99,8 @@ tx_binary(
         "@tx-pkg-aux//src:pkg-boot",
     ],
     linkopts = [
-        "-s", "FETCH=1",
+        "-sFETCH=1",
+        "-sASYNCIFY",
         "--post-js", "$(location :try_wasm_fetch_post_js)",
     ],
     data = [
@@ -177,18 +178,25 @@ if (typeof XMLHttpRequest === 'undefined' && typeof global !== 'undefined') {
         // Store as ArrayBuffer, Emscripten will extract numBytes from it
         self.response = buffer;
         self.responseText = new TextDecoder().decode(buffer);
-        if (self.onload) self.onload();
-        if (self.onreadystatechange) self.onreadystatechange();
+        if (self.onload) {
+          self.onload();
+        }
+        if (self.onreadystatechange && runtimeKeepaliveCounter > 0) {
+          self.onreadystatechange();
+        }
       })
       .catch(err => {
         self.status = 0;
         self.readyState = 4;
-        if (self.onerror) self.onerror(err);
-        if (self.onreadystatechange) self.onreadystatechange();
+        if (self.onerror) {
+          self.onerror(err);
+        }
+        if (self.onreadystatechange && runtimeKeepaliveCounter > 0) {
+            self.onreadystatechange();
+        }
       });
   };
 }
 EOF
 """,
 )
-
