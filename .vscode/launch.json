@@ -1,4 +1,5 @@
 {
+    // ================ Demo Targets ================
     // Useful links/commands to investigate source mapping issues.
     //  - https://github.com/bazelbuild/apple_support?tab=readme-ov-file
     //  - dsymutil -s bazel-bin/demo/hello-pkg | grep N_OSO
@@ -106,6 +107,20 @@
             ],
             "preLaunchTask": "demo:try-asio",
         },
+        {
+            "name": "demo:try-sdl3-1st (LLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/demo/try-sdl3-1st",
+            "cwd": "${workspaceFolder}",
+            "initCommands": [
+                "platform setting -w ${workspaceFolder}",
+                "command source ${env:HOME}/.lldbinit",
+                "command source ${workspaceFolder}/.lldbinit",
+            ],
+            "preLaunchTask": "demo:try-sdl3-1st",
+        },
+        // ================ Test Targets ================
         {
             "name": "test:misc (LLDB)",
             "type": "lldb",

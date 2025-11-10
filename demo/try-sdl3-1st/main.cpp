@@ -6,14 +6,14 @@
 #include <SDL3/SDL_version.h>
 
 #ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#include <emscripten/html5.h>
+    #include <emscripten.h>
+    #include <emscripten/html5.h>
 #endif
 
 // Global variables for emscripten loop
 struct Context {
-    SDL_Renderer *renderer;
-    SDL_Window *window;
+    SDL_Renderer* renderer;
+    SDL_Window* window;
     bool running;
 };
 
@@ -61,7 +61,6 @@ int main(int argc, char** argv)
     int major = SDL_VERSIONNUM_MAJOR(version);
     int minor = SDL_VERSIONNUM_MINOR(version);
     int patch = SDL_VERSIONNUM_MICRO(version);
-    
     Log::InfoF("SDL version: {}.{}.{}", major, minor, patch);
 
     // 1. SDL3 initialization
@@ -71,11 +70,12 @@ int main(int argc, char** argv)
     }
 
     // 2. Window creation
-    SDL_Window *window = SDL_CreateWindow(
+    SDL_Window* window = SDL_CreateWindow(
         "SDL3 Window",
-        //800, 600,
-        //600, 450,
-        400, 300,
+        // 800, 600,
+        // 600, 450,
+        400,
+        300,
         SDL_WINDOW_RESIZABLE
     );
     if (!window) {
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
     }
 
     // 3. Renderer creation
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, NULL);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, NULL);
     if (!renderer) {
         SDL_Log("Renderer creation failed: %s", SDL_GetError());
         SDL_DestroyWindow(window);
@@ -106,7 +106,7 @@ int main(int argc, char** argv)
     // For native version use a regular loop
     while (context.running) {
         Uint32 frameStart = SDL_GetTicks();
-        
+
         mainLoop(&context);
 
         // FPS limit (only for native version)
@@ -122,6 +122,6 @@ int main(int argc, char** argv)
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-    
+
     return 0;
 }

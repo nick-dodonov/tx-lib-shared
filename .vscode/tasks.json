@@ -1,4 +1,5 @@
 {
+    // ================ Demo Targets ================
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
@@ -81,6 +82,20 @@
         },
         {
             "type": "shell",
+            "label": "demo:try-sdl3-1st",
+            "command": "bazel build demo:try-sdl3-1st",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "focus": true,
+            },
+            "problemMatcher": "$gcc",
+        },
+        // ================ Test Targets ================
+        {
+            "type": "shell",
             "label": "test:misc",
             "command": "bazel build test:misc",
             "group": {
@@ -92,7 +107,7 @@
         {
             "label": "TRY TASK w/ Input Variable",
             "type": "shell",
-            "command": "echo ${input:buildTarget}",
+            "command": "echo ${input:buildTarget}", // ${relativeFileDirname}
             "problemMatcher": []
         }
     ],
