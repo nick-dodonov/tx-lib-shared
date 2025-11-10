@@ -48,6 +48,8 @@ single_version_override(
 )
 
 bazel_dep(name = "nghttp2", version = "1.65.0")
+bazel_dep(name = "openssl", version = "3.3.1.bcr.9")
+#TODO: try bazel_dep(name = "boringssl", version = "0.20251110.0")
 
 # Legacy repository dep way
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")

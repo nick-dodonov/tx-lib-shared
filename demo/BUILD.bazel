@@ -83,5 +83,7 @@ tx_binary(
     deps = [
         "@tx-pkg-aux//src:pkg-boot",
         "@nghttp2//:nghttp2",
+        "@openssl//:crypto",
+        "@openssl//:ssl",
     ],
 )
