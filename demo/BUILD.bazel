@@ -91,3 +91,15 @@ tx_binary(
         "//conditions:default": [],
     }),
 )
+
+tx_binary(
+    name = "try-wasm-fetch",
+    srcs = glob(["try-wasm-fetch/**"]),
+    deps = [
+        "@tx-pkg-aux//src:pkg-boot",
+    ],
+    target_compatible_with = select({
+        "@platforms//cpu:wasm32": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+)
