@@ -4,20 +4,20 @@ load("@bazel_skylib//rules:copy_directory.bzl", "copy_directory")
 tx_binary(
     name = "hello-pkg",
     srcs = glob(["hello-pkg/**"]),
-    deps = ["@tx-pkg-aux//src:pkg-boot"],
+    deps = ["@tx-pkg-aux//:pkg-boot"],
 )
 
 tx_binary(
     name = "hello-coro",
     srcs = glob(["hello-coro/**"]),
-    deps = ["@tx-pkg-aux//src:pkg-boot"],
+    deps = ["@tx-pkg-aux//:pkg-boot"],
 )
 
 tx_binary(
     name = "try-asio",
     srcs = glob(["try-asio/**"]),
     deps = [
-        "@tx-pkg-aux//src:pkg-boot",
+        "@tx-pkg-aux//:pkg-boot",
         "@asio//:asio",
     ],
 )
@@ -26,7 +26,7 @@ tx_binary(
     name = "try-sdl3-1st",
     srcs = glob(["try-sdl3-1st/**"]),
     deps = [
-        "@tx-pkg-aux//src:pkg-boot",
+        "@tx-pkg-aux//:pkg-boot",
         "@sdl3//:sdl3_static",
     ],
     #TODO: add support for sdl3_shared build on platforms except wasm32
@@ -48,7 +48,7 @@ tx_binary(
         ":copy_data",
     ],
     deps = [
-        "@tx-pkg-aux//src:pkg-boot",
+        "@tx-pkg-aux//:pkg-boot",
         "@sdl3//:sdl3_static",
     ],
     linkopts = select({
@@ -64,7 +64,7 @@ tx_binary(
 #     name = "try-sdl3pp-1st",
 #     srcs = glob(["try-sdl3pp-1st/**"]),
 #     deps = [
-#         "@tx-pkg-aux//src:pkg-boot",
+#         "@tx-pkg-aux//:pkg-boot",
 #         "@sdl3pp//:sdl3pp_headers",
 #         "@sdl3//:sdl3_static",
 #     ],
@@ -81,7 +81,7 @@ tx_binary(
     name = "try-nghttp2",
     srcs = glob(["try-nghttp2/**"]),
     deps = [
-        "@tx-pkg-aux//src:pkg-boot",
+        "@tx-pkg-aux//:pkg-boot",
         "@nghttp2//:nghttp2",
         "@openssl//:crypto",
         "@openssl//:ssl",
@@ -96,7 +96,7 @@ tx_binary(
     name = "try-wasm-fetch",
     srcs = glob(["try-wasm-fetch/**"]),
     deps = [
-        "@tx-pkg-aux//src:pkg-boot",
+        "@tx-pkg-aux//:pkg-boot",
     ],
     linkopts = [
         "-sFETCH=1",
