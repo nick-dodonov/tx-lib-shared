@@ -1,9 +1,9 @@
 {
-    // ================ Demo Targets ================
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
+        // ================ dev environment tasks
         {
             "type": "shell",
             "label": "compile_commands :refresh_all (OS)",
@@ -29,32 +29,15 @@
             },
             // https://code.visualstudio.com/docs/debugtest/tasks#_run-behavior
             "runOptions": {
-                "runOn": "folderOpen"
+                //ALWAYS runs "runOn": "folderOpen"
             }
         },
+        // ================ build demo tasks
         // https://web.archive.org/web/20220716134022/https://shanee.io/blog/2019/05/28/bazel-with-visual-studio-code/
         {
             "type": "shell",
-            "label": "demo:hello-pkg",
-            "command": "bazel build demo:hello-pkg",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-        },
-        {
-            "type": "shell",
-            "label": "demo:hello-coro",
-            "command": "bazel build demo:hello-coro",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-        },
-        {
-            "type": "shell",
-            "label": "demo:try-asio",
-            "command": "bazel build demo:try-asio", // ${relativeFileDirname}
+            "label": "build demo <relative>",
+            "command": "bazel build ${relativeFileDirname}",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -80,33 +63,7 @@
             //     }
             // }
         },
-        {
-            "type": "shell",
-            "label": "demo:try-sdl3-1st",
-            "command": "bazel build demo:try-sdl3-1st",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true,
-            },
-            "problemMatcher": "$gcc",
-        },
-        {
-            "type": "shell",
-            "label": "demo:try-sdl3-2nd",
-            "command": "bazel build demo:try-sdl3-2nd",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "focus": true,
-            },
-            "problemMatcher": "$gcc",
-        },
-        // ================ Test Targets ================
+        // ================ build test tasks
         {
             "type": "shell",
             "label": "test:misc",
@@ -116,7 +73,7 @@
                 "isDefault": true
             }
         },
-        // try w/ input variable
+        // ================ try w/ input variable
         {
             "label": "TRY TASK w/ Input Variable",
             "type": "shell",

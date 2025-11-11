@@ -1,21 +1,35 @@
 {
-    // ================ Demo Targets ================
-    // Useful links/commands to investigate source mapping issues.
-    //  - https://github.com/bazelbuild/apple_support?tab=readme-ov-file
-    //  - dsymutil -s bazel-bin/demo/hello-pkg | grep N_OSO
-    //  - dwarfdump --debug-line bazel-out/darwin_x86_64-dbg/bin/demo/_objs/hello-pkg/main.o
-    //  - TODO: add lldb investigation commands too
-    //TODO: Try Natvis for my types https://code.visualstudio.com/docs/cpp/natvis
-    //TODO: Find the way to share settings for different targets (e.g. via variables or "compounds")
-    //TODO: use shared .lldbinit setup (instead of similar duplicates) for different:
-    //  - build options (relative, absolute in output_base, relative w/ absolute include_dir)
-    //  - lldb debuggers (C/C++ ext, CodeLLDB ext, CLion built-in)
     "version": "0.2.0",
     "configurations": [
+        // ================ debug demo configurations
+        {
+            "name": "demo <relative> (LLDB)",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/bazel-bin/${relativeFileDirname}",
+            "cwd": "${workspaceFolder}",
+            "initCommands": [
+                "platform setting -w ${workspaceFolder}",
+                "command source ${env:HOME}/.lldbinit",
+                "command source ${workspaceFolder}/.lldbinit",
+            ],
+            "preLaunchTask": "build demo <relative>",
+        },
+        // ================ debug experiments configurations
+        // Useful links/commands to investigate source mapping issues.
+        //  - https://github.com/bazelbuild/apple_support?tab=readme-ov-file
+        //  - dsymutil -s bazel-bin/demo/hello-pkg | grep N_OSO
+        //  - dwarfdump --debug-line bazel-out/darwin_x86_64-dbg/bin/demo/_objs/hello-pkg/main.o
+        //  - TODO: add lldb investigation commands too
+        //TODO: Try Natvis for my types https://code.visualstudio.com/docs/cpp/natvis
+        //TODO: Find the way to share settings for different targets (e.g. via variables or "compounds")
+        //TODO: use shared .lldbinit setup (instead of similar duplicates) for different:
+        //  - build options (relative, absolute in output_base, relative w/ absolute include_dir)
+        //  - lldb debuggers (C/C++ ext, CodeLLDB ext, CLion built-in)
         // Via C/C++ extension ("cppdbg")
         //  https://code.visualstudio.com/docs/cpp/launch-json-reference#_sourcefilemap
         {
-            "name": "demo:hello-pkg (C/C++)",
+            "name": "demo/hello-pkg (C/C++)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg",
@@ -48,13 +62,13 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "demo:hello-pkg",
+            "preLaunchTask": "demo/hello-pkg",
             // "stopAtEntry": true,
         },
         // Via CodeLLDB extension ("lldb")
         //  https://github.com/vadimcn/codelldb/blob/master/MANUAL.md
         {
-            "name": "demo:hello-pkg (LLDB)",
+            "name": "demo/hello-pkg (LLDB)",
             "type": "lldb",
             "request": "launch",
             "program": "${workspaceFolder}/bazel-bin/demo/hello-pkg",
@@ -74,66 +88,10 @@
                 // "settings append target.source-map ${workspaceFolder}/external ${workspaceFolder}/bazel-${workspaceFolderBasename}/external",
                 // "b main", // better than stopOnEntry (stops in _start)
             ],
-            "preLaunchTask": "demo:hello-pkg",
+            "preLaunchTask": "demo/hello-pkg",
             // "stopOnEntry": true
         },
-        {
-            "name": "demo:hello-coro (LLDB)",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/hello-coro",
-            "cwd": "${workspaceFolder}",
-            "initCommands": [
-                "platform setting -w ${workspaceFolder}",
-                "command source ${env:HOME}/.lldbinit",
-                "command source ${workspaceFolder}/.lldbinit",
-            ],
-            "preLaunchTask": "demo:hello-coro",
-        },
-        {
-            "name": "demo:try-asio (LLDB)",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/try-asio",
-            "cwd": "${workspaceFolder}",
-            "initCommands": [
-                "platform setting -w ${workspaceFolder}",
-                "command source ${env:HOME}/.lldbinit",
-                "command source ${workspaceFolder}/.lldbinit",
-            ],
-            "args": [
-                "-s",
-                //"localhost",
-            ],
-            "preLaunchTask": "demo:try-asio",
-        },
-        {
-            "name": "demo:try-sdl3-1st (LLDB)",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/try-sdl3-1st",
-            "cwd": "${workspaceFolder}",
-            "initCommands": [
-                "platform setting -w ${workspaceFolder}",
-                "command source ${env:HOME}/.lldbinit",
-                "command source ${workspaceFolder}/.lldbinit",
-            ],
-            "preLaunchTask": "demo:try-sdl3-1st",
-        },
-        {
-            "name": "demo:try-sdl3-2nd (LLDB)",
-            "type": "lldb",
-            "request": "launch",
-            "program": "${workspaceFolder}/bazel-bin/demo/try-sdl3-2nd",
-            "cwd": "${workspaceFolder}",
-            "initCommands": [
-                "platform setting -w ${workspaceFolder}",
-                "command source ${env:HOME}/.lldbinit",
-                "command source ${workspaceFolder}/.lldbinit",
-            ],
-            "preLaunchTask": "demo:try-sdl3-2nd",
-        },
-        // ================ Test Targets ================
+        // ================ debug tests configurations
         {
             "name": "test:misc (LLDB)",
             "type": "lldb",
