@@ -52,7 +52,7 @@ bazel_dep(name = "openssl", version = "3.3.1.bcr.9")
 #TODO: try bazel_dep(name = "boringssl", version = "0.20251110.0")
 
 bazel_dep(name = "sdl3", version = "3.2.26")
-#bazel_dep(name = "sdl3pp", version = "0.3.1")
+bazel_dep(name = "sdl3pp", version = "0.3.1")
 
 # Legacy repository dep way
 # http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")

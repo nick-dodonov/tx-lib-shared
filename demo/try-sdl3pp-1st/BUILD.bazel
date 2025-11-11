@@ -16,5 +16,5 @@ tx_binary(
         "-fexceptions",
     ],
     # DISABLED because current SDL3pp version has issues with constexpr, exceptions and another compile errors w/ clang and C++20
-    tags = ["disabled"],
+    tags = ["disabled", "manual"],
 )
