@@ -1,0 +1,27 @@
+load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
+load("@bazel_skylib//rules:copy_directory.bzl", "copy_directory")
+
+copy_directory(
+    name = "copy_data",
+    src = "data",
+    out = "data",
+)
+
+tx_binary(
+    name = "try-sdl3-2nd",
+    srcs = glob(["*.cpp"]),
+    data = [
+        ":copy_data",
+    ],
+    deps = [
+        "@tx-pkg-aux//:pkg-boot",
+        "@sdl3//:sdl3_static",
+    ],
+    linkopts = select({
+        "//conditions:default": [],
+        "@platforms//cpu:wasm32": [
+            "--preload-file", "$(location :copy_data)@/data",
+        ],
+    }),
+    tags = ["manual"],
+)

@@ -1,0 +1,16 @@
+load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
+
+tx_binary(
+    name = "try-sdl3-1st",
+    srcs = glob(["*.cpp"]),
+    deps = [
+        "@tx-pkg-aux//:pkg-boot",
+        "@sdl3//:sdl3_static",
+    ],
+    #TODO: add support for sdl3_shared build on platforms except wasm32
+    # + select({
+    #     "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
+    #     "//conditions:default": ["@sdl3//:sdl3_shared"],
+    # }),
+    tags = ["manual"],
+)
