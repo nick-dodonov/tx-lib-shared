@@ -1,5 +1,0 @@
-# Overlay BUILD files for http_archive modules - not buildable targets
-# This package is used only for providing BUILD files to http_archive rules
-# Targets here should not be built directly
-
-package(default_visibility = ["//visibility:private"])

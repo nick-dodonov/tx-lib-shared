@@ -23,5 +23,4 @@ tx_binary(
             "--preload-file", "$(location :copy_data)@/data",
         ],
     }),
-    tags = ["manual"],
 )

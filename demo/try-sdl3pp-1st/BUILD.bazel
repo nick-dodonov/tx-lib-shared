@@ -1,6 +1,5 @@
 load("@tx-kit-ext//rules/build:tx_binary.bzl", "tx_binary")
 
-# DISABLED because current SDL3pp version has issues with constexpr, exceptions and another compile errors w/ clang and C++20
 tx_binary(
     name = "try-sdl3pp-1st",
     srcs = glob(["*.cpp"]),
@@ -16,5 +15,6 @@ tx_binary(
         "-Wno-missing-braces",
         "-fexceptions",
     ],
-    tags = ["manual", "disabled"],
+    # DISABLED because current SDL3pp version has issues with constexpr, exceptions and another compile errors w/ clang and C++20
+    tags = ["disabled"],
 )

@@ -12,5 +12,4 @@ tx_binary(
     #     "@platforms//cpu:wasm32": ["@sdl3//:sdl3_static"],
     #     "//conditions:default": ["@sdl3//:sdl3_shared"],
     # }),
-    tags = ["manual"],
 )
