@@ -152,7 +152,7 @@ HttpResponse makeHttpRequest(const std::string& host, int port, const std::strin
     // Resolve hostname
     struct hostent* server = gethostbyname(host.c_str());
     if (server == nullptr) {
-        Log::ErrorF("Failed to resolve hostname: {}", host);
+        Log::Error("Failed to resolve hostname: {}", host);
         close(sockfd);
         return response;
     }
@@ -165,12 +165,12 @@ HttpResponse makeHttpRequest(const std::string& host, int port, const std::strin
     memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
 
     if (connect(sockfd, reinterpret_cast<struct sockaddr*>(&serv_addr), sizeof(serv_addr)) < 0) {
-        Log::ErrorF("Failed to connect to {}:{}", host, port);
+        Log::Error("Failed to connect to {}:{}", host, port);
         close(sockfd);
         return response;
     }
 
-    Log::InfoF("Connected to {}:{}", host, port);
+    Log::Info("Connected to {}:{}", host, port);
 
     // Setup TLS if needed
     SSL* ssl = nullptr;
@@ -192,7 +192,7 @@ HttpResponse makeHttpRequest(const std::string& host, int port, const std::strin
                           "User-Agent: curl/8.7.1\r\n"
                           "\r\n";
 
-    Log::InfoF("Sending HTTP request ({} bytes) to {}...", request.size(), host);
+    Log::Info("Sending HTTP request ({} bytes) to {}...", request.size(), host);
 
     if (!sendHttpRequest(sockfd, ssl, request)) {
         cleanupTLS(ssl);
@@ -213,17 +213,16 @@ HttpResponse makeHttpRequest(const std::string& host, int port, const std::strin
 
 int main(int argc, char** argv)
 {
-    Boot::LogInfo(argc, argv);
-    Log::DefaultInit();
+    Boot::LogHeader(argc, argv);
 
     // Display nghttp2 version
     nghttp2_info* info = nghttp2_version(0);
-    Log::InfoF("nghttp2 version: {}", info->version_str);
+    Log::Info("nghttp2 version: {}", info->version_str);
 
     // Request 1: Plain HTTP to ifconfig.io
     Log::Info("========== Request 1: HTTP ifconfig.io ==========");
     HttpResponse resp1 = makeHttpRequest("ifconfig.io", 80, "/", false);
-    Log::InfoF("===== Status Code: {}", resp1.status_code);
+    Log::Info("===== Status Code: {}", resp1.status_code);
     Log::Info("===== Headers:");
     std::cout << resp1.headers << "\n";
     Log::Info("===== Body:");
@@ -232,7 +231,7 @@ int main(int argc, char** argv)
     // Request 2: HTTPS to httpbin.org
     Log::Info("========== Request 2: HTTPS httpbin.org /headers ==========");
     HttpResponse resp2 = makeHttpRequest("httpbin.org", 443, "/headers", true);
-    Log::InfoF("===== Status Code: {}", resp2.status_code);
+    Log::Info("===== Status Code: {}", resp2.status_code);
     Log::Info("===== Headers:");
     std::cout << resp2.headers << "\n";
     Log::Info("===== Body:");

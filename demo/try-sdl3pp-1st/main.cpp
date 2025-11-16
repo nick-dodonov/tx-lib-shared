@@ -6,12 +6,12 @@
 
 int main(int argc, char** argv)
 {
-    Boot::LogInfo(argc, argv);
+    Boot::LogHeader(argc, argv);
     Log::Info("SDL3pp try demo 1");
     int version = SDL::GetVersion();
     int major = SDL_VERSIONNUM_MAJOR(version);
     int minor = SDL_VERSIONNUM_MINOR(version);
     int patch = SDL_VERSIONNUM_MICRO(version);
-    Log::InfoF("SDL version: {}.{}.{}", major, minor, patch);
+    Log::Info("SDL version: {}.{}.{}", major, minor, patch);
     return 0;
 }

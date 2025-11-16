@@ -44,7 +44,7 @@ private:
     void handle_write(const std::error_code& error, size_t bytes_transferred)
     {
         auto err_msg = std::string(std::system_error(error).what());
-        Log::DebugF("written: {} bytes ({})", bytes_transferred, err_msg);
+        Log::Debug("written: {} bytes ({})", bytes_transferred, err_msg);
     }
 
     tcp::socket socket_;
@@ -103,7 +103,7 @@ int main_server() {
 
 int main(int argc, char** argv)
 {
-    Boot::LogInfo(argc, argv);
+    Boot::LogHeader(argc, argv);
 
     // try {
         if (argc != 2) {

@@ -458,7 +458,7 @@ void demonstrate_parallel_tasks() {
 
 int main(int argc, char** argv)
 {
-    Boot::LogInfo(argc, argv);
+    Boot::LogHeader(argc, argv);
     Log::Info("=== ДЕМОНСТРАЦИЯ КОРУТИН C++20 ===");
     Log::Info("Этот пример показывает различные аспекты работы с корутинами:");
     Log::Info("- Генераторы (co_yield)");
